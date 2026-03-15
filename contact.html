@@ -411,6 +411,51 @@
       footer { flex-direction: column; align-items: flex-start; }
       .foot-info { text-align: left; }
     }
+ 
+  .menu-toggle{
+  width:30px;
+  height:22px;
+  display:none;
+  flex-direction:column;
+  justify-content:space-between;
+  cursor:pointer;
+}
+
+.menu-toggle span{
+  display:block;
+  height:3px;
+  background:#c9a96a;
+  border-radius:2px;
+}
+
+/* Mobile */
+@media (max-width:768px){
+
+  nav{
+    position:absolute;
+    top:80px;
+    right:0;
+    background:#000;
+    width:220px;
+    display:flex;
+    flex-direction:column;
+    padding:20px;
+    transform:translateX(100%);
+    transition:0.3s;
+  }
+
+  nav a{
+    margin:10px 0;
+  }
+
+  nav.show{
+    transform:translateX(0);
+  }
+
+  .menu-toggle{
+    display:flex;
+  }
+}
   </style>
 </head>
 <body>
