@@ -14,6 +14,13 @@
 html{scroll-behavior:smooth;overflow-x:hidden}
 body{font-family:'Outfit',sans-serif;background:#080706;color:#EDE8DC;overflow-x:hidden;cursor:none}
  
+/* PAGE TRANSITION */
+.pt-overlay{position:fixed;inset:0;z-index:9000;background:#080706;pointer-events:none;opacity:0;transition:opacity .35s ease}
+.pt-overlay.fade-in{opacity:1;pointer-events:all}
+.pt-bar{position:fixed;top:0;left:0;right:0;height:2px;z-index:9001;background:#D4AF6A;transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+.pt-bar.loading{transform:scaleX(.7)}
+.pt-bar.done{transform:scaleX(1);transition:transform .2s ease}
+ 
 /* CURSOR */
 .cur{position:fixed;width:10px;height:10px;background:#D4AF6A;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
 .cur-r{position:fixed;width:36px;height:36px;border:1.5px solid rgba(212,175,106,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .12s ease}
@@ -24,8 +31,10 @@ body{font-family:'Outfit',sans-serif;background:#080706;color:#EDE8DC;overflow-x
 .nav.s{background:rgba(8,7,6,.97);backdrop-filter:blur(20px);padding:13px 48px;border-color:rgba(212,175,106,.1)}
 .nav-logo{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:5px;color:#D4AF6A;text-decoration:none}
 .nav-links{display:flex;gap:32px;list-style:none}
-.nav-links a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(237,232,220,.5);text-decoration:none;transition:color .25s}
+.nav-links a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(237,232,220,.5);text-decoration:none;transition:color .25s;position:relative}
 .nav-links a:hover{color:#D4AF6A}
+.nav-links a.active{color:#D4AF6A}
+.nav-links a.active::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:#D4AF6A}
 .nav-book{font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;background:#D4AF6A;color:#080706;padding:10px 22px;text-decoration:none;transition:background .25s}
 .nav-book:hover{background:#F0D08A}
 .ham{display:none;flex-direction:column;gap:5px;cursor:none;padding:4px}
@@ -43,63 +52,47 @@ body{font-family:'Outfit',sans-serif;background:#080706;color:#EDE8DC;overflow-x
  
 /* ══════════ HERO ══════════ */
 .hero{position:relative;height:100vh;min-height:620px;display:flex;align-items:flex-end;overflow:hidden}
- 
-/* slides */
 .slides{position:absolute;inset:0;z-index:0}
 .slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.4s ease}
 .slide.on{opacity:1}
- 
-/* video */
 .hvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:0;transition:opacity 1.2s}
 .hvid.on{opacity:1}
- 
-/* overlays */
 .ho1{position:absolute;inset:0;z-index:2;background:linear-gradient(100deg,rgba(8,7,6,.88) 0%,rgba(8,7,6,.5) 50%,rgba(8,7,6,.15) 100%)}
 .ho2{position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 100% 45% at 50% 100%,rgba(8,7,6,.95) 0%,transparent 70%)}
 .ho3{position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 70% 35% at 50% 0%,rgba(8,7,6,.7) 0%,transparent 60%)}
- 
-/* grid texture */
 .hgrid{position:absolute;inset:0;z-index:2;background-image:linear-gradient(rgba(212,175,106,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,106,.025) 1px,transparent 1px);background-size:64px 64px}
- 
 .hbody{position:relative;z-index:3;padding:0 60px 80px;max-width:860px;width:100%}
- 
 .h-eye{display:inline-flex;align-items:center;gap:10px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#D4AF6A;margin-bottom:22px;opacity:0;animation:up .7s .3s forwards}
 .ldot{width:7px;height:7px;border-radius:50%;background:#E84A20;animation:blink 1.5s infinite}
 @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.3)}}
- 
 .h1{font-family:'Bebas Neue',cursive;font-size:clamp(70px,14vw,158px);line-height:.88;letter-spacing:4px;color:#EDE8DC;text-shadow:0 4px 50px rgba(0,0,0,.8);opacity:0;animation:up .9s .5s forwards}
 .h1 .out{-webkit-text-stroke:1.5px #D4AF6A;color:transparent;display:block}
- 
 .hsub{margin-top:18px;font-size:clamp(15px,2.2vw,20px);font-weight:300;color:rgba(237,232,220,.65);opacity:0;animation:up .7s .75s forwards}
- 
 .htags{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px;opacity:0;animation:up .7s .95s forwards}
 .htag{padding:7px 16px;border:1px solid rgba(212,175,106,.28);background:rgba(212,175,106,.06);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(212,175,106,.85);backdrop-filter:blur(6px)}
- 
 .hbtns{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px;opacity:0;animation:up .7s 1.15s forwards}
- 
 .btn-g{display:inline-flex;align-items:center;gap:10px;padding:15px 34px;background:#D4AF6A;color:#080706;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;letter-spacing:.5px;text-decoration:none;transition:background .25s,transform .2s}
 .btn-g:hover{background:#F0D08A;transform:translateY(-2px)}
 .btn-o{display:inline-flex;align-items:center;gap:10px;padding:15px 34px;border:1.5px solid rgba(237,232,220,.28);background:rgba(8,7,6,.2);backdrop-filter:blur(8px);color:#EDE8DC;font-family:'Outfit',sans-serif;font-size:15px;font-weight:500;text-decoration:none;transition:border-color .25s,color .25s}
 .btn-o:hover{border-color:#D4AF6A;color:#D4AF6A}
- 
 .scroll-c{position:absolute;bottom:32px;right:52px;z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fd .8s 1.6s forwards}
 .scroll-l{width:1px;height:52px;background:linear-gradient(#D4AF6A,transparent);animation:shrink 2s ease-in-out infinite}
 .scroll-c span{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(212,175,106,.4);writing-mode:vertical-lr}
 @keyframes shrink{0%{transform:scaleY(1);opacity:.8}100%{transform:scaleY(.2);opacity:0}}
  
-/* ══════════ TICKER ══════════ */
+/* TICKER */
 .ticker{background:#D4AF6A;overflow:hidden;white-space:nowrap;padding:13px 0}
 .ttrack{display:inline-block;animation:tscroll 30s linear infinite;font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:5px;color:#080706;text-transform:uppercase}
 .ttrack i{font-style:normal;margin:0 22px;opacity:.35}
 @keyframes tscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
  
-/* ══════════ COMMON ══════════ */
+/* COMMON */
 .slabel{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#D4AF6A;margin-bottom:14px;display:flex;align-items:center;gap:12px}
 .slabel::before{content:'';width:24px;height:1px;background:#D4AF6A}
 .stitle{font-family:'Bebas Neue',cursive;font-size:clamp(36px,6vw,60px);letter-spacing:3px;color:#EDE8DC;line-height:1;margin-bottom:0}
 .stitle .a{color:#D4AF6A}
  
-/* ══════════ OFFERS ══════════ */
+/* OFFERS PREVIEW */
 .offers{background:#0D0B09;padding:90px 48px}
 .offers-in{max-width:1280px;margin:0 auto}
 .offers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:52px}
@@ -115,7 +108,7 @@ body{font-family:'Outfit',sans-serif;background:#080706;color:#EDE8DC;overflow-x
 .oval{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:2px;color:#D4AF6A}
 .oval small{font-family:'DM Mono',monospace;font-size:11px;color:#6A5E50;letter-spacing:1px;margin-left:8px;vertical-align:middle}
  
-/* ══════════ ABOUT ══════════ */
+/* ABOUT PREVIEW */
 .about{padding:100px 48px;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
 .about-vis{position:relative}
 .about-frame{aspect-ratio:4/5;overflow:hidden;background:#141210;position:relative}
@@ -132,69 +125,7 @@ body{font-family:'Outfit',sans-serif;background:#080706;color:#EDE8DC;overflow-x
 .sn{font-family:'Bebas Neue',cursive;font-size:48px;letter-spacing:2px;color:#D4AF6A;line-height:1}
 .sl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#6A5E50;margin-top:5px}
  
-/* ══════════ ENERGY ══════════ */
-.energy{background:#0D0B09;padding:100px 48px;position:relative;overflow:hidden}
-.energy::before{content:'TONIGHT';position:absolute;bottom:-30px;left:-10px;font-family:'Bebas Neue',cursive;font-size:clamp(100px,18vw,220px);letter-spacing:6px;color:rgba(212,175,106,.025);pointer-events:none;user-select:none;white-space:nowrap}
-.energy-in{max-width:1280px;margin:0 auto}
-.egrid{margin-top:56px;display:grid;grid-template-columns:1.3fr 1fr 1fr;grid-template-rows:auto auto;gap:3px}
-.ec{background:#141210;border:1px solid rgba(212,175,106,.07);padding:40px 34px;display:flex;flex-direction:column;min-height:210px;transition:background .3s,border-color .3s;position:relative;overflow:hidden}
-.ec:hover{background:#1A1714;border-color:rgba(212,175,106,.14)}
-.ec.tall{grid-row:span 2;min-height:440px}
-.etime{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#6A5E50;margin-bottom:18px}
-.eico{font-size:38px;margin-bottom:14px;display:block}
-.ename{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:2px;color:#EDE8DC;margin-bottom:10px;line-height:1.1}
-.edesc{font-size:15px;line-height:1.75;color:#6A5E50;flex:1}
-.etag{margin-top:20px;align-self:flex-start;padding:6px 14px;border:1px solid rgba(212,175,106,.2);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#D4AF6A}
-.echart{margin-top:28px}
-.echart-l{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#E84A20;display:flex;align-items:center;gap:8px;margin-bottom:14px}
-.echart-l::before{content:'';width:7px;height:7px;border-radius:50%;background:#E84A20;animation:blink 1.5s infinite;flex-shrink:0}
-.bars{display:flex;align-items:flex-end;gap:4px;height:64px}
-.bar{flex:1;background:rgba(212,175,106,.1);border-radius:2px 2px 0 0;position:relative;overflow:hidden}
-.bar::after{content:'';position:absolute;bottom:0;left:0;right:0;background:#D4AF6A;border-radius:2px 2px 0 0;animation:grow 1.6s ease forwards}
-.bar:nth-child(1)::after{height:28%;animation-delay:.1s}
-.bar:nth-child(2)::after{height:50%;animation-delay:.2s}
-.bar:nth-child(3)::after{height:42%;animation-delay:.3s}
-.bar:nth-child(4)::after{height:78%;animation-delay:.4s}
-.bar:nth-child(5)::after{height:58%;animation-delay:.5s}
-.bar:nth-child(6)::after{height:88%;animation-delay:.6s}
-.bar:nth-child(7)::after{height:68%;animation-delay:.7s}
-@keyframes grow{from{height:0}}
-.bdays{display:flex;gap:4px;margin-top:7px}
-.bdays span{flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6A5E50}
- 
-/* ══════════ MENU ══════════ */
-.menu-s{padding:100px 48px;max-width:1280px;margin:0 auto}
-.menu-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:52px;gap:20px;flex-wrap:wrap}
-.mlist{display:flex;flex-direction:column}
-.mrow{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:24px 0;border-bottom:1px solid rgba(212,175,106,.08);position:relative;cursor:none;transition:padding-left .3s}
-.mrow::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:#D4AF6A;transform:scaleX(0);transform-origin:left;transition:transform .4s}
-.mrow:hover{padding-left:14px}
-.mrow:hover::after{transform:scaleX(1)}
-.mname{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;color:#EDE8DC}
-.msub{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;color:#6A5E50;margin-top:4px}
-.mright{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.mprice{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:2px;color:#D4AF6A}
-.mbadge{padding:4px 10px;background:rgba(232,74,32,.12);border:1px solid rgba(232,74,32,.3);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E84A20}
- 
-/* ══════════ GALLERY ══════════ */
-.gallery{padding:0 48px 100px;max-width:1280px;margin:0 auto}
-.ghead{margin-bottom:40px}
-.ggrid{display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
-.gi{overflow:hidden;background:#141210;position:relative}
-.gi img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s,opacity .4s;opacity:0}
-.gi img.ld{opacity:1}
-.gi:hover img{transform:scale(1.06)}
-.gov{position:absolute;inset:0;background:linear-gradient(transparent 50%,rgba(8,7,6,.88));opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;padding:16px}
-.gi:hover .gov{opacity:1}
-.glabel{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#D4AF6A}
-.gi:nth-child(1){grid-column:span 7;grid-row:span 2;min-height:420px}
-.gi:nth-child(2){grid-column:span 5;min-height:205px}
-.gi:nth-child(3){grid-column:span 5;min-height:205px}
-.gi:nth-child(4){grid-column:span 4;min-height:270px}
-.gi:nth-child(5){grid-column:span 4;min-height:270px}
-.gi:nth-child(6){grid-column:span 4;min-height:270px}
- 
-/* ══════════ PROMO BAND ══════════ */
+/* PROMO */
 .promo{background:linear-gradient(135deg,#160804,#0D0B09);border-top:1px solid rgba(212,175,106,.1);border-bottom:1px solid rgba(212,175,106,.1);padding:72px 48px;text-align:center;position:relative;overflow:hidden}
 .promo::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(232,74,32,.05),transparent)}
 .promo-in{position:relative;max-width:680px;margin:0 auto}
@@ -204,41 +135,8 @@ body{font-family:'Outfit',sans-serif;background:#080706;color:#EDE8DC;overflow-x
 .psub{font-size:17px;color:rgba(237,232,220,.55);margin:16px 0 36px;line-height:1.75}
 .pbtns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
  
-/* ══════════ CONTACT ══════════ */
-.contact{background:#0D0B09;padding:100px 48px}
-.contact-in{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
-.ctitle{font-family:'Bebas Neue',cursive;font-size:clamp(40px,6vw,60px);letter-spacing:3px;color:#EDE8DC;line-height:1;margin-bottom:14px}
-.ctitle span{color:#D4AF6A}
-.cdesc{font-size:16px;color:#6A5E50;line-height:1.8;max-width:360px;margin-bottom:34px}
-.clinks{display:flex;flex-direction:column}
-.clink{display:flex;align-items:center;gap:18px;padding:20px 0;border-bottom:1px solid rgba(212,175,106,.08);text-decoration:none;color:inherit;position:relative;transition:padding-left .3s}
-.clink::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:#D4AF6A;transform:scaleX(0);transform-origin:left;transition:transform .4s}
-.clink:hover{padding-left:10px}
-.clink:hover::after{transform:scaleX(1)}
-.cico{width:48px;height:48px;border:1px solid rgba(212,175,106,.14);background:rgba(212,175,106,.04);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.ccat{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#D4AF6A;margin-bottom:4px}
-.cval{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;color:#EDE8DC}
-.chint{font-family:'DM Mono',monospace;font-size:11px;color:#6A5E50;margin-top:2px}
-.carr{margin-left:auto;color:rgba(212,175,106,.28);font-size:18px;transition:transform .3s,color .3s}
-.clink:hover .carr{transform:translateX(6px);color:#D4AF6A}
-.cright{display:flex;flex-direction:column;gap:14px}
-.icard{background:#141210;border:1px solid rgba(212,175,106,.08);padding:28px;position:relative}
-.icard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,#D4AF6A,transparent)}
-.ictitle{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#D4AF6A;margin-bottom:14px}
-.ihours{display:flex;flex-direction:column;gap:10px}
-.ihr{display:flex;justify-content:space-between;align-items:baseline}
-.iday{font-family:'DM Mono',monospace;font-size:12px;color:#6A5E50}
-.itime{font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:2px;color:#EDE8DC}
-.iaddr{font-size:15px;color:#6A5E50;line-height:1.75}
-.iaddr strong{color:#EDE8DC;font-weight:600}
-.ctabox{background:#1A1714;border:1px solid rgba(212,175,106,.1);padding:30px;position:relative}
-.ctabox::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#D4AF6A}
-.ctabox-t{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:2px;color:#EDE8DC;margin-bottom:6px}
-.ctabox-s{font-size:13px;color:#6A5E50;line-height:1.65;margin-bottom:22px}
-.ctabox-b{display:flex;gap:12px;flex-wrap:wrap}
- 
-/* ══════════ FOOTER ══════════ */
-footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52px 48px 28px}
+/* FOOTER */
+footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52px 48px 120px}
 .ftop{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;flex-wrap:wrap;gap:20px}
 .flogo{font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:6px;color:#D4AF6A}
 .fmotto{font-size:14px;color:#6A5E50;font-style:italic;margin-top:4px}
@@ -247,7 +145,7 @@ footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52p
 .fsoc:hover{border-color:#D4AF6A;color:#D4AF6A;background:rgba(212,175,106,.06)}
 .fbot{max-width:1280px;margin:0 auto;border-top:1px solid rgba(212,175,106,.06);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-family:'DM Mono',monospace;font-size:11px;color:#6A5E50;letter-spacing:1px}
  
-/* ══════════ FLOAT BAR ══════════ */
+/* FLOAT BAR */
 .fbar{position:fixed;bottom:0;left:0;right:0;z-index:198;background:rgba(8,7,6,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(212,175,106,.13);padding:13px 48px}
 .fbar-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px}
 .fbar-txt{flex:1;min-width:0}
@@ -258,71 +156,46 @@ footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52p
 .fbar-tel{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border:1px solid rgba(212,175,106,.25);color:#D4AF6A;font-family:'DM Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap;transition:border-color .25s,background .25s}
 .fbar-tel:hover{border-color:#D4AF6A;background:rgba(212,175,106,.06)}
  
-/* ══════════ ANIMATIONS ══════════ */
+/* ANIMATIONS */
 @keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fd{from{opacity:0}to{opacity:1}}
 .rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
 .rv.on{opacity:1;transform:translateY(0)}
  
-/* ══════════ RESPONSIVE ══════════ */
+/* RESPONSIVE */
 @media(max-width:960px){
-  .nav{padding:14px 24px}
-  .nav.s{padding:12px 24px}
-  .nav-links,.nav-book{display:none}
-  .ham{display:flex}
-  .hbody{padding:0 24px 80px}
-  .scroll-c{right:20px;bottom:88px}
-  .offers{padding:64px 24px}
-  .offers-grid{grid-template-columns:1fr;gap:3px}
-  .about{grid-template-columns:1fr;padding:72px 24px;gap:52px}
-  .abadge{right:10px}
-  .energy{padding:72px 24px}
-  .egrid{grid-template-columns:1fr}
-  .ec.tall{min-height:280px}
-  .menu-s{padding:72px 24px}
-  .menu-top{flex-direction:column;align-items:flex-start}
-  .gallery{padding:0 24px 80px}
-  .ggrid{grid-template-columns:1fr 1fr}
-  .gi:nth-child(1){grid-column:span 2;min-height:260px}
-  .gi:nth-child(2),.gi:nth-child(3){grid-column:span 1;min-height:175px}
-  .gi:nth-child(4),.gi:nth-child(5),.gi:nth-child(6){grid-column:span 2;min-height:175px}
+  .nav{padding:14px 24px}.nav.s{padding:12px 24px}
+  .nav-links,.nav-book{display:none}.ham{display:flex}
+  .hbody{padding:0 24px 80px}.scroll-c{right:20px;bottom:88px}
+  .offers{padding:64px 24px}.offers-grid{grid-template-columns:1fr;gap:3px}
+  .about{grid-template-columns:1fr;padding:72px 24px;gap:52px}.abadge{right:10px}
   .promo{padding:56px 24px}
-  .contact{padding:72px 24px}
-  .contact-in{grid-template-columns:1fr;gap:52px}
-  footer{padding:44px 24px 24px}
-  .ftop{flex-direction:column;align-items:flex-start}
-  .fbot{flex-direction:column}
-  .fbar{padding:12px 20px}
-  .fbar-txt{display:none}
-  .astats{gap:24px}
-  .ctabox-b{flex-direction:column}
+  footer{padding:44px 24px 110px}.ftop{flex-direction:column;align-items:flex-start}.fbot{flex-direction:column}
+  .fbar{padding:12px 20px}.fbar-txt{display:none}.astats{gap:24px}
 }
-@media(max-width:480px){
-  .h1{letter-spacing:2px}
-  .hbtns,.pbtns{flex-direction:column}
-  .htags{gap:6px}
-}
+@media(max-width:480px){.h1{letter-spacing:2px}.hbtns,.pbtns{flex-direction:column}.htags{gap:6px}}
 </style>
 </head>
 <body>
  
+<div class="pt-overlay" id="pt-overlay"></div>
+<div class="pt-bar" id="pt-bar"></div>
 <div class="cur" id="cur"></div>
 <div class="cur-r" id="cur-r"></div>
  
 <!-- DRAWER -->
 <div class="drawer" id="drawer">
-  <button class="drawer-x" onclick="cD()">✕</button>
-  <a href="#offers" onclick="cD()">Ưu Đãi</a>
-  <a href="#about" onclick="cD()">About</a>
-  <a href="#menu" onclick="cD()">Menu</a>
-  <a href="#gallery" onclick="cD()">Gallery</a>
-  <a href="#contact" onclick="cD()">Liên Hệ</a>
+  <button class="drawer-x" id="drawer-x">✕</button>
+  <a href="offers.html">Ưu Đãi</a>
+  <a href="about.html">About</a>
+  <a href="menu.html">Menu</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="contact.html">Liên Hệ</a>
 </div>
  
 <!-- NAV -->
 <header class="nav" id="nav">
   <a href="index.html" class="nav-logo">THE WANN</a>
-
   <ul class="nav-links">
     <li><a href="offers.html">Ưu đãi</a></li>
     <li><a href="about.html">About</a></li>
@@ -330,21 +203,12 @@ footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52p
     <li><a href="gallery.html">Gallery</a></li>
     <li><a href="contact.html">Liên hệ</a></li>
   </ul>
-
-  <a href="booking.html" class="nav-book">Đặt Bàn</a>
-
-  <div class="ham" id="ham" onclick="tD()">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
+  <a href="contact.html" class="nav-book">Đặt Bàn</a>
+  <div class="ham" id="ham" onclick="tD()"><span></span><span></span><span></span></div>
 </header>
  
-<!-- ══════════════════════════════════════════
-     HERO
-══════════════════════════════════════════ -->
+<!-- HERO -->
 <section class="hero">
-  <!-- SLIDESHOW — dùng ảnh thật THE WANN + unsplash backup -->
   <div class="slides" id="slides">
     <div class="slide on" style="background-image:url('https://i.postimg.cc/Sst0dRpS/TOFI8033.jpg'),url('https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=1920&q=80')"></div>
     <div class="slide"    style="background-image:url('https://i.postimg.cc/DypgzGdY/TW-4631.jpg'),url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1920&q=80')"></div>
@@ -352,17 +216,10 @@ footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52p
     <div class="slide"    style="background-image:url('https://i.postimg.cc/3NmkQP1Z/QM-8485.jpg'),url('https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=1920&q=80')"></div>
     <div class="slide"    style="background-image:url('https://i.postimg.cc/sXFyC1NH/TW-5134.jpg'),url('https://images.unsplash.com/photo-1549492423-400259a2e574?w=1920&q=80')"></div>
   </div>
- 
-  <!-- VIDEO -->
   <video class="hvid" id="vid" autoplay muted loop playsinline>
     <source src="https://pub-52cf7508df4b4c109b66a730e3ab5569.r2.dev/1JEKCP8S4_725072.mp4" type="video/mp4">
   </video>
- 
-  <div class="ho1"></div>
-  <div class="ho2"></div>
-  <div class="ho3"></div>
-  <div class="hgrid"></div>
- 
+  <div class="ho1"></div><div class="ho2"></div><div class="ho3"></div><div class="hgrid"></div>
   <div class="hbody">
     <div class="h-eye"><span class="ldot"></span>THÁNG 3 RỰC RỠ — ƯU ĐÃI ĐANG DIỄN RA</div>
     <h1 class="h1">THE<span class="out">WANN</span></h1>
@@ -378,27 +235,19 @@ footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52p
       <a href="tel:0902734576" class="btn-o">📞 0902 734 576</a>
     </div>
   </div>
- 
-  <div class="scroll-c">
-    <div class="scroll-l"></div>
-    <span>Scroll</span>
-  </div>
+  <div class="scroll-c"><div class="scroll-l"></div><span>Scroll</span></div>
 </section>
  
 <!-- TICKER -->
-<div class="ticker">
-  <div class="ttrack">
-    THE WANN <i>✦</i> NIGHTCLUB &amp; BAR <i>✦</i> FOOD · DRINK · MUSIC <i>✦</i> Q1 SAIGON <i>✦</i>
-    THÁNG 3 RỰC RỠ <i>✦</i> COMBO 800K FREE <i>✦</i> GIẢM 10% BILL <i>✦</i> 51 BÙI THỊ XUÂN <i>✦</i>
-    THE WANN <i>✦</i> NIGHTCLUB &amp; BAR <i>✦</i> FOOD · DRINK · MUSIC <i>✦</i> Q1 SAIGON <i>✦</i>
-    THÁNG 3 RỰC RỠ <i>✦</i> COMBO 800K FREE <i>✦</i> GIẢM 10% BILL <i>✦</i> 51 BÙI THỊ XUÂN <i>✦</i>
-  </div>
-</div>
+<div class="ticker"><div class="ttrack">
+  THE WANN <i>✦</i> NIGHTCLUB &amp; BAR <i>✦</i> FOOD · DRINK · MUSIC <i>✦</i> Q1 SAIGON <i>✦</i>
+  THÁNG 3 RỰC RỠ <i>✦</i> COMBO 800K FREE <i>✦</i> GIẢM 10% BILL <i>✦</i> 51 BÙI THỊ XUÂN <i>✦</i>
+  THE WANN <i>✦</i> NIGHTCLUB &amp; BAR <i>✦</i> FOOD · DRINK · MUSIC <i>✦</i> Q1 SAIGON <i>✦</i>
+  THÁNG 3 RỰC RỠ <i>✦</i> COMBO 800K FREE <i>✦</i> GIẢM 10% BILL <i>✦</i> 51 BÙI THỊ XUÂN <i>✦</i>
+</div></div>
  
-<!-- ══════════════════════════════════════════
-     OFFERS
-══════════════════════════════════════════ -->
-<section class="offers" id="offers">
+<!-- OFFERS PREVIEW -->
+<section class="offers">
   <div class="offers-in">
     <div class="rv">
       <div class="slabel">Tháng 3 Rực Rỡ</div>
@@ -406,51 +255,45 @@ footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52p
     </div>
     <div class="offers-grid rv">
       <div class="ocard">
-        <div class="onum">01</div>
-        <span class="oico">🎁</span>
+        <div class="onum">01</div><span class="oico">🎁</span>
         <div class="ocat">Ưu đãi 1</div>
         <div class="oname">Tặng Combo Ăn Uống</div>
         <div class="odesc">2 món ăn Signature + 5 lon Heineken lạnh phục vụ tận bàn. Check-in trước 20:30.</div>
         <div class="oval">800.000đ <small>miễn phí</small></div>
       </div>
       <div class="ocard">
-        <div class="onum">02</div>
-        <span class="oico">💰</span>
+        <div class="onum">02</div><span class="oico">💰</span>
         <div class="ocat">Ưu đãi 2</div>
         <div class="oname">Giảm Giá Hóa Đơn</div>
         <div class="odesc">Bill từ 3 triệu giảm 5%. Bill từ 8 triệu giảm 10%. Cộng dồn với combo tặng.</div>
         <div class="oval">5–10% <small>off toàn bill</small></div>
       </div>
       <div class="ocard">
-        <div class="onum">03</div>
-        <span class="oico">👑</span>
+        <div class="onum">03</div><span class="oico">👑</span>
         <div class="ocat">Ưu đãi 3</div>
         <div class="oname">Bàn VIP Đặc Quyền</div>
         <div class="odesc">Vị trí view sân khấu tốt nhất. Dịch vụ riêng tận bàn. Không gian cá nhân hóa.</div>
         <div class="oval">VIP <small>exclusive</small></div>
       </div>
     </div>
+    <div style="margin-top:44px;text-align:center" class="rv">
+      <a href="offers.html" class="btn-o" style="display:inline-flex">Xem tất cả ưu đãi →</a>
+    </div>
   </div>
 </section>
  
-<!-- ══════════════════════════════════════════
-     ABOUT
-══════════════════════════════════════════ -->
-<section class="about" id="about">
-  <div class="about-vis rv">
-    <div class="acorner tl"></div>
-    <div class="acorner br"></div>
+<!-- ABOUT PREVIEW -->
+<section class="about rv">
+  <div class="about-vis">
+    <div class="acorner tl"></div><div class="acorner br"></div>
     <div class="about-frame">
       <img data-src="https://i.postimg.cc/DypgzGdY/TW-4631.jpg"
            src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80"
            alt="THE WANN interior" class="ld">
     </div>
-    <div class="abadge">
-      <div class="abadge-n">Q1</div>
-      <div class="abadge-l">Bến Thành</div>
-    </div>
+    <div class="abadge"><div class="abadge-n">Q1</div><div class="abadge-l">Bến Thành</div></div>
   </div>
-  <div class="rv">
+  <div>
     <div class="slabel">Our Story</div>
     <div class="stitle">Không Gian <span class="a">Đẳng Cấp</span></div>
     <br>
@@ -461,151 +304,11 @@ footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52p
       <div><div class="sn">500+</div><div class="sl">Sự kiện</div></div>
       <div><div class="sn">4.9★</div><div class="sl">Rating</div></div>
     </div>
+    <div style="margin-top:36px"><a href="about.html" class="btn-o">Khám phá thêm →</a></div>
   </div>
 </section>
  
-<!-- ══════════════════════════════════════════
-     TONIGHT'S ENERGY
-══════════════════════════════════════════ -->
-<section class="energy">
-  <div class="energy-in">
-    <div class="rv">
-      <div class="slabel" style="color:#E84A20"><span style="width:24px;height:1px;background:#E84A20;display:inline-block;margin-right:0"></span>Live Tonight</div>
-      <div class="stitle">Năng Lượng <span class="a">Đêm Nay</span></div>
-    </div>
-    <div class="egrid rv">
-      <div class="ec tall">
-        <div class="etime">21:00 – 04:00</div>
-        <span class="eico">🎧</span>
-        <div class="ename">DJ Set & Live Music</div>
-        <div class="edesc">Ban nhạc live và DJ biểu diễn mỗi tối. Jazz Acoustic, R&B đến Electronic — không đêm nào giống đêm nào.</div>
-        <div class="echart">
-          <div class="echart-l">Đặt bàn theo ngày trong tuần</div>
-          <div class="bars">
-            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          </div>
-          <div class="bdays"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
-        </div>
-        <div class="etag">Every Night</div>
-      </div>
-      <div class="ec">
-        <div class="etime">Food Program</div>
-        <span class="eico">🍽</span>
-        <div class="ename">Ẩm Thực Signature</div>
-        <div class="edesc">50+ món từ bếp trưởng. Wagyu, hải sản, gà giòn — ăn cùng nhạc và cocktail.</div>
-        <div class="etag">50+ Dishes</div>
-      </div>
-      <div class="ec">
-        <div class="etime">Bar Program</div>
-        <span class="eico">🍸</span>
-        <div class="ename">Mixology Bar</div>
-        <div class="edesc">30+ cocktail thủ công theo mùa. Bartender pha riêng theo yêu cầu của bạn.</div>
-        <div class="etag">Craft Cocktails</div>
-      </div>
-      <div class="ec">
-        <div class="etime">Private Events</div>
-        <span class="eico">🎊</span>
-        <div class="ename">Sinh Nhật & Tiệc</div>
-        <div class="edesc">Tổ chức trọn gói. Trang trí riêng. Bàn VIP cá nhân hóa hoàn toàn theo yêu cầu.</div>
-        <div class="etag">Private Booking</div>
-      </div>
-    </div>
-  </div>
-</section>
- 
-<!-- ══════════════════════════════════════════
-     MENU
-══════════════════════════════════════════ -->
-<section class="menu-s" id="menu">
-  <div class="menu-top rv">
-    <div>
-      <div class="slabel">Menu</div>
-      <div class="stitle">VIP <span class="a">Combo Packages</span></div>
-    </div>
-    <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="btn-o">Xem full menu →</a>
-  </div>
-  <div class="mlist rv">
-    <div class="mrow">
-      <div><div class="mname">The Wann Food Set</div><div class="msub">6–8 khách · Ăn uống trọn gói</div></div>
-      <div class="mright"><span class="mbadge">Phổ biến</span><div class="mprice">3.799.000đ</div></div>
-    </div>
-    <div class="mrow">
-      <div><div class="mname">Combo Phantom</div><div class="msub">24 Heineken + Món ăn đặc trưng</div></div>
-      <div class="mright"><div class="mprice">6.999.000đ</div></div>
-    </div>
-    <div class="mrow">
-      <div><div class="mname">Combo Saturn</div><div class="msub">2 Gold Label + Full Food Premium</div></div>
-      <div class="mright"><div class="mprice">8.299.000đ</div></div>
-    </div>
-    <div class="mrow">
-      <div><div class="mname">Combo Universe</div><div class="msub">2 Belaire + Hải sản cao cấp</div></div>
-      <div class="mright"><span class="mbadge">VIP</span><div class="mprice">9.599.000đ</div></div>
-    </div>
-    <div class="mrow">
-      <div><div class="mname">Combo Jupiter</div><div class="msub">2 Hennessy VSOP + Premium Banquet</div></div>
-      <div class="mright"><div class="mprice">10.399.000đ</div></div>
-    </div>
-    <div class="mrow">
-      <div><div class="mname">Combo Mercury</div><div class="msub">2 Dom Pérignon + Full VIP Experience</div></div>
-      <div class="mright"><span class="mbadge">Ultimate</span><div class="mprice">24.319.000đ</div></div>
-    </div>
-  </div>
-  <div style="margin-top:44px;text-align:center" class="rv">
-    <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="btn-g" style="display:inline-flex">📘 Inbox nhận báo giá chi tiết</a>
-  </div>
-</section>
- 
-<!-- ══════════════════════════════════════════
-     GALLERY
-══════════════════════════════════════════ -->
-<section class="gallery" id="gallery">
-  <div class="ghead rv">
-    <div class="slabel">Gallery</div>
-    <div class="stitle">Không Gian <span class="a">THE WANN</span></div>
-  </div>
-  <div class="ggrid rv">
-    <div class="gi">
-      <img data-src="https://i.postimg.cc/Sst0dRpS/TOFI8033.jpg"
-           src="https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=1200&q=80"
-           alt="Main Floor" class="ld">
-      <div class="gov"><span class="glabel">Main Floor</span></div>
-    </div>
-    <div class="gi">
-      <img data-src="https://i.postimg.cc/DypgzGdY/TW-4631.jpg"
-           src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80"
-           alt="VIP Lounge" class="ld">
-      <div class="gov"><span class="glabel">VIP Lounge</span></div>
-    </div>
-    <div class="gi">
-      <img data-src="https://i.postimg.cc/nzLrMX1R/3R1A9269.jpg"
-           src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80"
-           alt="Party Night" class="ld">
-      <div class="gov"><span class="glabel">Party Night</span></div>
-    </div>
-    <div class="gi">
-      <img data-src="https://i.postimg.cc/3NmkQP1Z/QM-8485.jpg"
-           src="https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80"
-           alt="DJ Booth" class="ld">
-      <div class="gov"><span class="glabel">DJ Booth</span></div>
-    </div>
-    <div class="gi">
-      <img data-src="https://i.postimg.cc/sXFyC1NH/TW-5134.jpg"
-           src="https://images.unsplash.com/photo-1549492423-400259a2e574?w=800&q=80"
-           alt="Bar Area" class="ld">
-      <div class="gov"><span class="glabel">Bar Area</span></div>
-    </div>
-    <div class="gi">
-      <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80"
-           alt="The Vibe" class="ld">
-      <div class="gov"><span class="glabel">The Vibe</span></div>
-    </div>
-  </div>
-</section>
- 
-<!-- ══════════════════════════════════════════
-     PROMO BAND
-══════════════════════════════════════════ -->
+<!-- PROMO BAND -->
 <div class="promo rv">
   <div class="promo-in">
     <span class="pfire">🔥</span>
@@ -618,82 +321,14 @@ footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52p
   </div>
 </div>
  
-<!-- ══════════════════════════════════════════
-     CONTACT
-══════════════════════════════════════════ -->
-<section class="contact" id="contact">
-  <div class="contact-in">
-    <div class="rv">
-      <div class="slabel">Liên Hệ</div>
-      <div class="ctitle">Đặt Bàn &<br><span>Kết Nối</span></div>
-      <p class="cdesc">Liên hệ trực tiếp qua điện thoại, Zalo hoặc Facebook — phản hồi nhanh, tư vấn combo phù hợp nhóm.</p>
-      <div class="clinks">
-        <a href="tel:0902734576" class="clink">
-          <div class="cico">📞</div>
-          <div>
-            <div class="ccat">Điện thoại / Zalo</div>
-            <div class="cval">0902 734 576</div>
-            <div class="chint">Gọi hoặc nhắn Zalo trực tiếp</div>
-          </div>
-          <div class="carr">→</div>
-        </a>
-        <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="clink">
-          <div class="cico">📘</div>
-          <div>
-            <div class="ccat">Facebook</div>
-            <div class="cval">Hữu Viên · The Wann</div>
-            <div class="chint">Inbox đặt bàn nhanh nhất</div>
-          </div>
-          <div class="carr">→</div>
-        </a>
-        <a href="https://zalo.me/0902734576" target="_blank" class="clink">
-          <div class="cico">💬</div>
-          <div>
-            <div class="ccat">Zalo</div>
-            <div class="cval">0902 734 576</div>
-            <div class="chint">Chat trực tiếp · 24/7</div>
-          </div>
-          <div class="carr">→</div>
-        </a>
-      </div>
-    </div>
-    <div class="cright rv">
-      <div class="icard">
-        <div class="ictitle">Giờ Mở Cửa</div>
-        <div class="ihours">
-          <div class="ihr"><span class="iday">Thứ 2 – Thứ 5</span><span class="itime">21:00 – 04:00</span></div>
-          <div class="ihr"><span class="iday">Thứ 6 – Chủ Nhật</span><span class="itime">20:00 – 04:00</span></div>
-        </div>
-      </div>
-      <div class="icard">
-        <div class="ictitle">Địa Chỉ</div>
-        <p class="iaddr"><strong>THE WANN Nightclub & Bar</strong><br>51 Bùi Thị Xuân, P. Phạm Ngũ Lão<br>Quận 1, TP. Hồ Chí Minh</p>
-        <a href="https://maps.google.com/?q=51+Bui+Thi+Xuan+Quan+1+HCM" target="_blank"
-           style="display:inline-block;margin-top:14px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#D4AF6A;text-decoration:none">Xem Google Maps →</a>
-      </div>
-      <div class="ctabox">
-        <div class="ctabox-t">🔥 Book Ngay — Nhận Ưu Đãi</div>
-        <div class="ctabox-s">Tặng combo 800K + Giảm 10% bill. Hiệu lực cả tháng 3. Số lượng bàn VIP có hạn.</div>
-        <div class="ctabox-b">
-          <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="btn-g">📘 Nhắn Facebook</a>
-          <a href="tel:0902734576" class="btn-o">📞 0902 734 576</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
- 
 <!-- FOOTER -->
 <footer>
   <div class="ftop">
-    <div>
-      <div class="flogo">THE WANN</div>
-      <div class="fmotto">"Where the night truly begins"</div>
-    </div>
+    <div><div class="flogo">THE WANN</div><div class="fmotto">"Where the night truly begins"</div></div>
     <div class="fsocs">
-      <a href="tel:0902734576" class="fsoc" title="Gọi / Zalo">📞</a>
-      <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="fsoc" title="Facebook">📘</a>
-      <a href="https://zalo.me/0902734576" target="_blank" class="fsoc" title="Zalo">💬</a>
+      <a href="tel:0902734576" class="fsoc">📞</a>
+      <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="fsoc">📘</a>
+      <a href="https://zalo.me/0902734576" target="_blank" class="fsoc">💬</a>
     </div>
   </div>
   <div class="fbot">
@@ -715,189 +350,68 @@ footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52p
 </div>
  
 <script>
-// ================================
-// DEVICE CHECK (disable heavy effects on mobile)
-// ================================
-const isMobile = window.innerWidth <= 768;
-
-
-// ================================
-// CUSTOM CURSOR (desktop only)
-// ================================
+// PAGE TRANSITION
+const overlay=document.getElementById('pt-overlay');
+const bar=document.getElementById('pt-bar');
+function navigateTo(url){
+  bar.classList.add('loading');
+  overlay.classList.add('fade-in');
+  setTimeout(()=>{bar.classList.add('done')},200);
+  setTimeout(()=>{window.location.href=url},400);
+}
+document.querySelectorAll('a[href]').forEach(a=>{
+  const href=a.getAttribute('href');
+  if(href&&!href.startsWith('http')&&!href.startsWith('tel:')&&!href.startsWith('mailto:')&&!href.startsWith('#')&&href.endsWith('.html')){
+    a.addEventListener('click',e=>{e.preventDefault();navigateTo(href)});
+  }
+});
+window.addEventListener('pageshow',()=>{overlay.classList.remove('fade-in');bar.classList.remove('loading','done')});
+ 
+// CURSOR
+const isMobile=window.innerWidth<=768;
 if(!isMobile){
-
-const C = document.getElementById('cur');
-const R = document.getElementById('cur-r');
-
-let mx=0,my=0,rx=0,ry=0;
-
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX;
-  my=e.clientY;
-});
-
-(function loop(){
-  rx+=(mx-rx)*.12;
-  ry+=(my-ry)*.12;
-
-  if(C){
-    C.style.left=mx+'px';
-    C.style.top=my+'px';
-  }
-
-  if(R){
-    R.style.left=rx+'px';
-    R.style.top=ry+'px';
-  }
-
-  requestAnimationFrame(loop);
-})();
-
-document.querySelectorAll('a,button,.ocard,.mrow,.clink,.gi').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{
-    if(C){C.style.width='16px';C.style.height='16px'}
-    if(R){R.style.width='50px';R.style.height='50px'}
+  const C=document.getElementById('cur'),R=document.getElementById('cur-r');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  (function loop(){
+    rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+    if(C){C.style.left=mx+'px';C.style.top=my+'px'}
+    if(R){R.style.left=rx+'px';R.style.top=ry+'px'}
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button,.ocard').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{if(C){C.style.width='16px';C.style.height='16px'}if(R){R.style.width='50px';R.style.height='50px'}});
+    el.addEventListener('mouseleave',()=>{if(C){C.style.width='10px';C.style.height='10px'}if(R){R.style.width='36px';R.style.height='36px'}});
   });
-
-  el.addEventListener('mouseleave',()=>{
-    if(C){C.style.width='10px';C.style.height='10px'}
-    if(R){R.style.width='36px';R.style.height='36px'}
-  });
-});
-
 }
-
-
-// ================================
-// NAVBAR SCROLL EFFECT
-// ================================
+ 
+// NAV
 const nav=document.getElementById('nav');
-
-if(nav){
-window.addEventListener('scroll',()=>{
-  nav.classList.toggle('s',window.scrollY>60);
-});
-}
-
-
-// ================================
-// DRAWER MENU
-// ================================
-function tD(){
-  const drawer=document.getElementById('drawer');
-  const ham=document.getElementById('ham');
-
-  if(drawer) drawer.classList.toggle('o');
-  if(ham) ham.classList.toggle('o');
-}
-
-function cD(){
-  const drawer=document.getElementById('drawer');
-  const ham=document.getElementById('ham');
-
-  if(drawer) drawer.classList.remove('o');
-  if(ham) ham.classList.remove('o');
-}
-
-
-// ================================
-// HERO SLIDESHOW
-// ================================
+window.addEventListener('scroll',()=>{nav.classList.toggle('s',window.scrollY>60)});
+ 
+// DRAWER
+function tD(){document.getElementById('drawer').classList.toggle('o');document.getElementById('ham').classList.toggle('o')}
+function cD(){document.getElementById('drawer').classList.remove('o');document.getElementById('ham').classList.remove('o')}
+document.getElementById('drawer-x').addEventListener('click',cD);
+ 
+// SLIDESHOW
 const sls=document.querySelectorAll('.slide');
-
-let si=0;
-let st=null;
-
-if(sls.length>1){
-
-st=setInterval(()=>{
-  sls[si].classList.remove('on');
-
-  si=(si+1)%sls.length;
-
-  sls[si].classList.add('on');
-
-},4500);
-
-}
-
-
-// ================================
-// HERO VIDEO
-// ================================
+let si=0,st=null;
+if(sls.length>1){st=setInterval(()=>{sls[si].classList.remove('on');si=(si+1)%sls.length;sls[si].classList.add('on')},4500)}
+ 
+// VIDEO
 const vid=document.getElementById('vid');
-
-if(vid){
-
-vid.addEventListener('canplaythrough',()=>{
-  vid.classList.add('on');
-
-  if(st) clearInterval(st);
-});
-
-vid.addEventListener('error',()=>{});
-
-}
-
-
-// ================================
-// REVEAL ANIMATION
-// ================================
-const ro=new IntersectionObserver(entries=>{
-  entries.forEach((e,i)=>{
-    if(e.isIntersecting){
-
-      setTimeout(()=>{
-        e.target.classList.add('on');
-      },i*70);
-
-    }
-  });
-},{threshold:.1});
-
+if(vid){vid.addEventListener('canplaythrough',()=>{vid.classList.add('on');if(st)clearInterval(st)})}
+ 
+// REVEAL
+const ro=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('on'),i*70)})},{threshold:.1});
 document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
-
-
-// ================================
-// IMAGE LAZY LOAD
-// ================================
-const io=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-
-    if(e.isIntersecting){
-
-      const img=e.target;
-
-      if(img.dataset.src){
-
-        const tmp=new Image();
-
-        tmp.onload=()=>{
-          img.src=img.dataset.src;
-        };
-
-        tmp.src=img.dataset.src;
-
-      }
-
-      img.classList.add('ld');
-
-      io.unobserve(img);
-
-    }
-
-  });
-});
-
+ 
+// LAZY IMG
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const img=e.target;if(img.dataset.src){const t=new Image();t.onload=()=>{img.src=img.dataset.src};t.src=img.dataset.src}img.classList.add('ld');io.unobserve(img)}})});
 document.querySelectorAll('img[data-src]').forEach(img=>io.observe(img));
-
-document.querySelectorAll('img:not([data-src])').forEach(img=>{
-  img.classList.add('ld');
-});
-
-
-
-
+document.querySelectorAll('img:not([data-src])').forEach(img=>img.classList.add('ld'));
 </script>
 </body>
 </html>
+ 
