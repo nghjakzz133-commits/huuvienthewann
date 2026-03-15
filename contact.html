@@ -649,28 +649,41 @@
     </div>
   </footer>
  
-  <script>
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.rv').forEach(el => io.observe(el));
- 
-    // Live open/closed badge
-    const badge = document.querySelector('.open-badge');
-    if (badge) {
-      const now = new Date();
-      const h = now.getHours();
-      const day = now.getDay(); // 0=Sun,1=Mon...
-      const isWeekend = day === 5 || day === 6 || day === 0;
-      const openHour = isWeekend ? 20 : 21;
-      const isOpen = h >= openHour || h < 4;
-      badge.textContent = isOpen ? '● Đang mở cửa' : '● Hiện đang đóng cửa';
-      badge.style.color = isOpen ? '#4caf81' : '#888';
+<script>
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
     }
-  </script>
- 
+  });
+},{ threshold:0.1 });
+
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+const badge = document.querySelector('.open-badge');
+if (badge){
+  const now = new Date();
+  const h = now.getHours();
+  const day = now.getDay();
+
+  const isWeekend = day === 5 || day === 6 || day === 0;
+  const openHour = isWeekend ? 20 : 21;
+
+  const isOpen = h >= openHour || h < 4;
+
+  badge.textContent = isOpen ? "● Đang mở cửa" : "● Hiện đang đóng cửa";
+  badge.style.color = isOpen ? "#4caf81" : "#888";
+}
+
+/* hamburger */
+const toggle = document.getElementById("menuToggle");
+const nav = document.getElementById("navMenu");
+
+if(toggle){
+  toggle.onclick = () => nav.classList.toggle("show");
+}
+</script>
 </body>
 </html>
  
