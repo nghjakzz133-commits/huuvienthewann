@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ưu Đãi Đặc Biệt – THE WANN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+ 
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --gold:   #c9a84c;
+      --gold2:  #e8c96e;
+      --dark:   #0a0a0a;
+      --dark2:  #111111;
+      --dark3:  #1a1a1a;
+      --cream:  #f2ede6;
+      --muted:  #888;
+      --white:  #ffffff;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-serif:   'Cormorant Garamond', serif;
+      --font-body:    'DM Sans', sans-serif;
+    }
+ 
+    html { scroll-behavior: smooth; }
+ 
+    body {
+      background: var(--dark);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+ 
+    /* ─── GRAIN OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+ 
+    /* ─── HEADER ─── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      height: 72px;
+      background: rgba(10,10,10,0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+    }
+ 
+    .logo {
+      font-family: var(--font-display);
+      font-size: 28px;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .logo span { color: var(--white); }
+ 
+    nav { display: flex; gap: 36px; align-items: center; }
+    nav a {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .25s;
+    }
+    nav a:hover, nav a.active { color: var(--gold); }
+ 
+    .nav-cta {
+      padding: 9px 22px;
+      border: 1px solid var(--gold);
+      color: var(--gold) !important;
+      border-radius: 1px;
+      transition: background .25s, color .25s !important;
+    }
+    .nav-cta:hover { background: var(--gold); color: var(--dark) !important; }
+ 
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      overflow: hidden;
+    }
+ 
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 60%, rgba(201,168,76,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 100% 80% at 50% 100%, rgba(201,168,76,0.04) 0%, transparent 60%),
+        var(--dark);
+    }
+    .hero-lines {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 80%);
+    }
+ 
+    .hero-content { position: relative; z-index: 1; }
+ 
+    .hero-tag {
+      display: inline-block;
+      font-size: 10px; font-weight: 500; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.35);
+      padding: 7px 18px; margin-bottom: 36px;
+      animation: fadeUp .8s ease both;
+    }
+ 
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(72px, 12vw, 160px);
+      line-height: .9;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      animation: fadeUp .8s .15s ease both;
+    }
+    .hero-title .gold { color: var(--gold); }
+ 
+    .hero-sub {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(18px, 2.5vw, 28px);
+      color: rgba(255,255,255,0.55);
+      margin-top: 18px;
+      animation: fadeUp .8s .3s ease both;
+    }
+ 
+    .hero-divider {
+      width: 1px; height: 80px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      margin: 48px auto 0;
+      animation: fadeUp .8s .45s ease both;
+    }
+ 
+    /* ─── VALIDITY STRIP ─── */
+    .validity {
+      position: relative; z-index: 1;
+      background: var(--dark2);
+      border-top: 1px solid rgba(201,168,76,0.15);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      padding: 18px 0;
+      overflow: hidden;
+    }
+ 
+    .validity-track {
+      display: flex; gap: 60px;
+      white-space: nowrap;
+      animation: marquee 18s linear infinite;
+      width: max-content;
+    }
+    .validity-item {
+      display: flex; align-items: center; gap: 14px;
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold);
+    }
+    .validity-item::before { content: '◆'; font-size: 7px; opacity: .6; }
+ 
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+ 
+    /* ─── SECTION WRAPPER ─── */
+    .section {
+      position: relative; z-index: 1;
+      padding: 120px 48px;
+      max-width: 1400px; margin: 0 auto;
+    }
+    .section-sm { padding: 80px 48px; }
+ 
+    /* ─── HEADING ─── */
+    .sh-label {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 14px; display: block;
+    }
+    .sh-title {
+      font-family: var(--font-display);
+      font-size: clamp(44px, 7vw, 96px);
+      line-height: .92;
+      letter-spacing: 0.04em;
+      color: var(--white);
+    }
+    .sh-title .a { color: var(--gold); }
+    .sh-desc {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 20px; color: rgba(255,255,255,.45);
+      margin-top: 16px; max-width: 480px;
+      line-height: 1.6;
+    }
+ 
+    /* ─── OFFERS GRID ─── */
+    .og-wrap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 72px;
+      border: 1px solid rgba(201,168,76,0.12);
+    }
+ 
+    .ocard {
+      position: relative;
+      padding: 52px 40px 44px;
+      background: var(--dark2);
+      overflow: hidden;
+      transition: background .4s;
+      cursor: default;
+    }
+    .ocard::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.05) 0%, transparent 60%);
+      opacity: 0; transition: opacity .4s;
+    }
+    .ocard:hover { background: var(--dark3); }
+    .ocard:hover::after { opacity: 1; }
+ 
+    .ocard-border {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      opacity: 0; transition: opacity .4s;
+    }
+    .ocard:hover .ocard-border { opacity: 1; }
+ 
+    .onum {
+      font-family: var(--font-display);
+      font-size: 80px;
+      line-height: 1;
+      color: rgba(201,168,76,0.06);
+      position: absolute; top: 20px; right: 24px;
+      letter-spacing: .02em;
+      transition: color .4s;
+    }
+    .ocard:hover .onum { color: rgba(201,168,76,0.12); }
+ 
+    .oico {
+      font-size: 32px;
+      display: block; margin-bottom: 24px;
+      filter: saturate(0) brightness(1.5);
+      transition: filter .4s;
+    }
+    .ocard:hover .oico { filter: saturate(1) brightness(1); }
+ 
+    .ocat {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 12px;
+    }
+ 
+    .oname {
+      font-family: var(--font-display);
+      font-size: clamp(26px, 3vw, 38px);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 18px;
+    }
+ 
+    .odesc {
+      font-size: 14px; line-height: 1.75;
+      color: rgba(255,255,255,.45);
+      margin-bottom: 32px;
+    }
+ 
+    .oval {
+      display: inline-flex; align-items: baseline; gap: 8px;
+      font-family: var(--font-display);
+      font-size: 28px; letter-spacing: .04em;
+      color: var(--gold);
+    }
+    .oval small {
+      font-family: var(--font-body);
+      font-size: 11px; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--muted);
+    }
+ 
+    /* ─── FEATURE OFFERS (big cards) ─── */
+    .fo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 2px;
+    }
+ 
+    .focard {
+      position: relative;
+      padding: 60px 52px;
+      background: var(--dark2);
+      overflow: hidden;
+      transition: background .4s;
+    }
+    .focard:hover { background: #161616; }
+ 
+    .focard-accent {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0; transition: opacity .4s;
+    }
+    .focard:hover .focard-accent { opacity: 1; }
+ 
+    .focard-num {
+      font-family: var(--font-display);
+      font-size: 120px; line-height: 1;
+      color: rgba(201,168,76,0.04);
+      position: absolute; bottom: -10px; right: 24px;
+      pointer-events: none; transition: color .4s;
+    }
+    .focard:hover .focard-num { color: rgba(201,168,76,0.09); }
+ 
+    .focard-tag {
+      display: inline-block;
+      font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid rgba(201,168,76,.3);
+      padding: 5px 14px; margin-bottom: 28px;
+    }
+ 
+    .focard-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, 52px);
+      letter-spacing: .04em; line-height: 1;
+      color: var(--white); margin-bottom: 20px;
+    }
+ 
+    .focard-desc {
+      font-size: 14px; line-height: 1.8;
+      color: rgba(255,255,255,.42);
+      max-width: 340px; margin-bottom: 36px;
+    }
+ 
+    .focard-value {
+      font-family: var(--font-display);
+      font-size: 36px; letter-spacing: .04em;
+      color: var(--gold);
+    }
+    .focard-value small {
+      font-family: var(--font-body);
+      font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--muted); margin-left: 6px;
+    }
+ 
+    /* ─── CONDITIONS ─── */
+    .cond-wrap {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(201,168,76,0.1);
+      margin-top: 80px;
+      border: 1px solid rgba(201,168,76,0.1);
+    }
+    .cond-item {
+      background: var(--dark);
+      padding: 36px 28px;
+      text-align: center;
+    }
+    .cond-icon { font-size: 24px; margin-bottom: 14px; display: block; }
+    .cond-label {
+      font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px; display: block;
+    }
+    .cond-text {
+      font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.65;
+    }
+ 
+    /* ─── CTA SECTION ─── */
+    .cta-section {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 120px 48px;
+      overflow: hidden;
+    }
+    .cta-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 70%);
+    }
+    .cta-section .sh-title { margin-bottom: 16px; }
+    .cta-desc {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 20px; color: rgba(255,255,255,.4);
+      margin-bottom: 48px;
+    }
+ 
+    .btn-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+ 
+    .btn-gold {
+      display: inline-block;
+      padding: 16px 44px;
+      background: var(--gold);
+      color: var(--dark);
+      font-size: 11px; font-weight: 500; letter-spacing: .25em;
+      text-transform: uppercase; text-decoration: none;
+      border: 1px solid var(--gold);
+      transition: background .3s, color .3s;
+    }
+    .btn-gold:hover { background: transparent; color: var(--gold); }
+ 
+    .btn-outline {
+      display: inline-block;
+      padding: 16px 44px;
+      background: transparent;
+      color: var(--white);
+      font-size: 11px; font-weight: 500; letter-spacing: .25em;
+      text-transform: uppercase; text-decoration: none;
+      border: 1px solid rgba(255,255,255,.2);
+      transition: border-color .3s, color .3s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+ 
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(201,168,76,0.12);
+      padding: 48px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .foot-logo { font-family: var(--font-display); font-size: 22px; letter-spacing: .18em; color: var(--gold); }
+    .foot-logo span { color: var(--white); }
+    .foot-info { font-size: 12px; color: var(--muted); line-height: 1.8; text-align: right; }
+ 
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+ 
+    .rv {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .75s ease, transform .75s ease;
+    }
+    .rv.in { opacity: 1; transform: translateY(0); }
+    .rv-d1 { transition-delay: .1s; }
+    .rv-d2 { transition-delay: .22s; }
+    .rv-d3 { transition-delay: .34s; }
+    .rv-d4 { transition-delay: .46s; }
+ 
+    /* ─── MOBILE ─── */
+    @media (max-width: 900px) {
+      header { padding: 0 20px; }
+      nav { display: none; }
+      .section { padding: 80px 20px; }
+      .og-wrap { grid-template-columns: 1fr; }
+      .fo-grid { grid-template-columns: 1fr; }
+      .cond-wrap { grid-template-columns: 1fr 1fr; }
+      .cta-section { padding: 80px 20px; }
+      footer { flex-direction: column; text-align: center; }
+      .foot-info { text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .cond-wrap { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+ 
+  <!-- HEADER -->
+  <header>
+    <a href="index.html" class="logo">THE <span>WANN</span></a>
+    <nav>
+      <a href="index.html">Trang Chủ</a>
+      <a href="#offers" class="active">Ưu Đãi</a>
+      <a href="index.html#about">Về Chúng Tôi</a>
+      <a href="index.html#events">Sự Kiện</a>
+      <a href="index.html#contact" class="nav-cta">Đặt Bàn</a>
+    </nav>
+  </header>
+ 
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Tháng 3 · 2025 · Quận 1, TP.HCM</div>
+      <h1 class="hero-title">ƯU<br/><span class="gold">ĐÃI</span><br/>ĐẶC BIỆT</h1>
+      <p class="hero-sub">Những đêm không thể quên bắt đầu từ đây</p>
+      <div class="hero-divider"></div>
+    </div>
+  </section>
+ 
+  <!-- MARQUEE -->
+  <div class="validity">
+    <div class="validity-track">
+      <div class="validity-item">Áp dụng xuyên suốt tháng 3/2025</div>
+      <div class="validity-item">Thứ 5 – Chủ Nhật hằng tuần</div>
+      <div class="validity-item">Check-in trước 20:30 nhận ưu đãi đặc biệt</div>
+      <div class="validity-item">Không giới hạn số lượng khách</div>
+      <div class="validity-item">Cộng dồn nhiều ưu đãi trong cùng bill</div>
+      <!-- duplicate for seamless loop -->
+      <div class="validity-item">Áp dụng xuyên suốt tháng 3/2025</div>
+      <div class="validity-item">Thứ 5 – Chủ Nhật hằng tuần</div>
+      <div class="validity-item">Check-in trước 20:30 nhận ưu đãi đặc biệt</div>
+      <div class="validity-item">Không giới hạn số lượng khách</div>
+      <div class="validity-item">Cộng dồn nhiều ưu đãi trong cùng bill</div>
+    </div>
+  </div>
+ 
+  <!-- MAIN OFFERS GRID -->
+  <div class="section">
+    <div class="rv">
+      <span class="sh-label">Tháng 3 Rực Rỡ</span>
+      <h2 class="sh-title">Ưu Đãi <span class="a">Cốt Lõi</span></h2>
+      <p class="sh-desc">Ba đặc quyền dành riêng cho những vị khách tinh tế tại THE WANN.</p>
+    </div>
+ 
+    <div class="og-wrap rv rv-d1">
+ 
+      <div class="ocard">
+        <div class="ocard-border"></div>
+        <div class="onum">01</div>
+        <span class="oico">🎁</span>
+        <div class="ocat">Ưu đãi 1</div>
+        <div class="oname">Tặng Combo Ăn Uống</div>
+        <div class="odesc">2 món ăn Signature + 5 lon Heineken lạnh phục vụ tận bàn. Check-in trước 20:30 để nhận ngay ưu đãi.</div>
+        <div class="oval">800.000đ <small>miễn phí</small></div>
+      </div>
+ 
+      <div class="ocard">
+        <div class="ocard-border"></div>
+        <div class="onum">02</div>
+        <span class="oico">💰</span>
+        <div class="ocat">Ưu đãi 2</div>
+        <div class="oname">Giảm Giá Hóa Đơn</div>
+        <div class="odesc">Bill từ 3 triệu — giảm 5%. Bill từ 8 triệu — giảm 10%. Được cộng dồn với combo tặng cùng bill.</div>
+        <div class="oval">5–10% <small>off toàn bill</small></div>
+      </div>
+ 
+      <div class="ocard">
+        <div class="ocard-border"></div>
+        <div class="onum">03</div>
+        <span class="oico">👑</span>
+        <div class="ocat">Ưu đãi 3</div>
+        <div class="oname">Bàn VIP Đặc Quyền</div>
+        <div class="odesc">Vị trí view sân khấu tốt nhất. Dịch vụ riêng tận bàn. Không gian cá nhân hóa hoàn toàn.</div>
+        <div class="oval">VIP <small>exclusive</small></div>
+      </div>
+ 
+    </div>
+ 
+    <!-- EXTENDED OFFERS -->
+    <div class="fo-grid rv rv-d2">
+ 
+      <div class="focard">
+        <div class="focard-accent"></div>
+        <div class="focard-num">04</div>
+        <div class="focard-tag">Ưu Đãi 4</div>
+        <div class="focard-title">Free Entry<br/>Cuối Tuần</div>
+        <div class="focard-desc">Miễn phí entrance cho nhóm từ 4 người trở lên vào Thứ 6 & Thứ 7. Áp dụng khi đặt bàn trước qua hotline.</div>
+        <div class="focard-value">Free <small>entrance</small></div>
+      </div>
+ 
+      <div class="focard">
+        <div class="focard-accent"></div>
+        <div class="focard-num">05</div>
+        <div class="focard-tag">Ưu Đãi 5</div>
+        <div class="focard-title">Birthday<br/>Night Luxury</div>
+        <div class="focard-desc">Sinh nhật trong tháng? Nhận 1 chai rượu vang đỏ cao cấp + bánh kem + hoa + backdrop riêng để check-in.</div>
+        <div class="focard-value">Birthday <small>package</small></div>
+      </div>
+ 
+    </div>
+ 
+    <!-- CONDITIONS -->
+    <div class="cond-wrap rv rv-d3">
+      <div class="cond-item">
+        <span class="cond-icon">🗓️</span>
+        <span class="cond-label">Thời gian</span>
+        <p class="cond-text">Thứ 5 – Chủ Nhật<br/>xuyên suốt tháng 3/2025</p>
+      </div>
+      <div class="cond-item">
+        <span class="cond-icon">⏰</span>
+        <span class="cond-label">Check-in</span>
+        <p class="cond-text">Combo tặng áp dụng<br/>khi check-in trước 20:30</p>
+      </div>
+      <div class="cond-item">
+        <span class="cond-icon">📲</span>
+        <span class="cond-label">Đặt bàn trước</span>
+        <p class="cond-text">Ưu tiên bàn VIP khi<br/>đặt trước qua hotline</p>
+      </div>
+      <div class="cond-item">
+        <span class="cond-icon">✅</span>
+        <span class="cond-label">Kết hợp</span>
+        <p class="cond-text">Cộng dồn combo &amp; giảm<br/>giá trong cùng một bill</p>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-bg"></div>
+    <div style="position:relative; z-index:1;">
+      <span class="sh-label" style="display:block; margin-bottom:14px;">Còn Chờ Gì Nữa</span>
+      <h2 class="sh-title" style="margin-bottom:16px;">Đặt Bàn<br/><span class="a">Ngay Hôm Nay</span></h2>
+      <p class="cta-desc">Số lượng bàn VIP có giới hạn — liên hệ ngay để không bỏ lỡ.</p>
+      <div class="btn-row">
+        <a href="tel:+84XXXXXXXXX" class="btn-gold">📞 Gọi Đặt Bàn</a>
+        <a href="https://zalo.me/" class="btn-outline">💬 Nhắn Zalo</a>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot-logo">THE <span>WANN</span></div>
+    <div class="foot-info">
+      THE WANN Nightclub · Quận 1, TP. Hồ Chí Minh<br/>
+      © 2025 THE WANN. All rights reserved.
+    </div>
+  </footer>
+ 
+  <script>
+    // Reveal on scroll
+    const revealEls = document.querySelectorAll('.rv');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+  </script>
+ 
+</body>
+</html>
+ 
