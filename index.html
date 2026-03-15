@@ -715,66 +715,217 @@ footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52p
 </div>
  
 <script>
-// CURSOR
-const C=document.getElementById('cur'),R=document.getElementById('cur-r');
+// ================================
+// DEVICE CHECK (disable heavy effects on mobile)
+// ================================
+const isMobile = window.innerWidth <= 768;
+
+
+// ================================
+// CUSTOM CURSOR (desktop only)
+// ================================
+if(!isMobile){
+
+const C = document.getElementById('cur');
+const R = document.getElementById('cur-r');
+
 let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
-(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;C.style.left=mx+'px';C.style.top=my+'px';R.style.left=rx+'px';R.style.top=ry+'px';requestAnimationFrame(loop)})();
-document.querySelectorAll('a,button,.ocard,.mrow,.clink,.gi').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{C.style.width='16px';C.style.height='16px';R.style.width='50px';R.style.height='50px'});
-  el.addEventListener('mouseleave',()=>{C.style.width='10px';C.style.height='10px';R.style.width='36px';R.style.height='36px'});
+
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;
+  my=e.clientY;
 });
- 
-// NAV
-window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('s',scrollY>60));
- 
-// DRAWER
-function tD(){document.getElementById('drawer').classList.toggle('o');document.getElementById('ham').classList.toggle('o')}
-function cD(){document.getElementById('drawer').classList.remove('o');document.getElementById('ham').classList.remove('o')}
- 
-// HERO SLIDESHOW
-const sls=document.querySelectorAll('.slide');
-let si=0;
-const st=setInterval(()=>{sls[si].classList.remove('on');si=(si+1)%sls.length;sls[si].classList.add('on')},4500);
- 
-// HERO VIDEO
-const vid=document.getElementById('vid');
-if(vid){
-  vid.addEventListener('canplaythrough',()=>{vid.classList.add('on');clearInterval(st)});
-  vid.addEventListener('error',()=>{});
+
+(function loop(){
+  rx+=(mx-rx)*.12;
+  ry+=(my-ry)*.12;
+
+  if(C){
+    C.style.left=mx+'px';
+    C.style.top=my+'px';
+  }
+
+  if(R){
+    R.style.left=rx+'px';
+    R.style.top=ry+'px';
+  }
+
+  requestAnimationFrame(loop);
+})();
+
+document.querySelectorAll('a,button,.ocard,.mrow,.clink,.gi').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    if(C){C.style.width='16px';C.style.height='16px'}
+    if(R){R.style.width='50px';R.style.height='50px'}
+  });
+
+  el.addEventListener('mouseleave',()=>{
+    if(C){C.style.width='10px';C.style.height='10px'}
+    if(R){R.style.width='36px';R.style.height='36px'}
+  });
+});
+
 }
- 
-// REVEAL
+
+
+// ================================
+// NAVBAR SCROLL EFFECT
+// ================================
+const nav=document.getElementById('nav');
+
+if(nav){
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('s',window.scrollY>60);
+});
+}
+
+
+// ================================
+// DRAWER MENU
+// ================================
+function tD(){
+  const drawer=document.getElementById('drawer');
+  const ham=document.getElementById('ham');
+
+  if(drawer) drawer.classList.toggle('o');
+  if(ham) ham.classList.toggle('o');
+}
+
+function cD(){
+  const drawer=document.getElementById('drawer');
+  const ham=document.getElementById('ham');
+
+  if(drawer) drawer.classList.remove('o');
+  if(ham) ham.classList.remove('o');
+}
+
+
+// ================================
+// HERO SLIDESHOW
+// ================================
+const sls=document.querySelectorAll('.slide');
+
+let si=0;
+let st=null;
+
+if(sls.length>1){
+
+st=setInterval(()=>{
+  sls[si].classList.remove('on');
+
+  si=(si+1)%sls.length;
+
+  sls[si].classList.add('on');
+
+},4500);
+
+}
+
+
+// ================================
+// HERO VIDEO
+// ================================
+const vid=document.getElementById('vid');
+
+if(vid){
+
+vid.addEventListener('canplaythrough',()=>{
+  vid.classList.add('on');
+
+  if(st) clearInterval(st);
+});
+
+vid.addEventListener('error',()=>{});
+
+}
+
+
+// ================================
+// REVEAL ANIMATION
+// ================================
 const ro=new IntersectionObserver(entries=>{
-  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('on'),i*70)});
-},{threshold:.1});
-document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
- 
-// LAZY LOAD ảnh thật THE WANN (replace unsplash fallback)
-const io=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
+  entries.forEach((e,i)=>{
     if(e.isIntersecting){
-      const img=e.target;
-      if(img.dataset.src){
-        const tmp=new Image();
-        tmp.onload=()=>{img.src=img.dataset.src};
-        tmp.src=img.dataset.src;
-      }
-      img.classList.add('ld');
-      io.unobserve(img);
+
+      setTimeout(()=>{
+        e.target.classList.add('on');
+      },i*70);
+
     }
   });
-});
-document.querySelectorAll('img[data-src]').forEach(img=>io.observe(img));
-document.querySelectorAll('img:not([data-src])').forEach(img=>{img.classList.add('ld')});
- 
-// SMOOTH SCROLL
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click',e=>{
-    const t=document.querySelector(a.getAttribute('href'));
-    if(t){e.preventDefault();window.scrollTo({top:t.getBoundingClientRect().top+scrollY-76,behavior:'smooth'})}
+},{threshold:.1});
+
+document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
+
+
+// ================================
+// IMAGE LAZY LOAD
+// ================================
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+
+    if(e.isIntersecting){
+
+      const img=e.target;
+
+      if(img.dataset.src){
+
+        const tmp=new Image();
+
+        tmp.onload=()=>{
+          img.src=img.dataset.src;
+        };
+
+        tmp.src=img.dataset.src;
+
+      }
+
+      img.classList.add('ld');
+
+      io.unobserve(img);
+
+    }
+
   });
 });
+
+document.querySelectorAll('img[data-src]').forEach(img=>io.observe(img));
+
+document.querySelectorAll('img:not([data-src])').forEach(img=>{
+  img.classList.add('ld');
+});
+
+
+// ================================
+// SMOOTH SCROLL (safe version)
+// ================================
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+
+  const id=a.getAttribute('href');
+
+  if(id.length>1){
+
+    const target=document.querySelector(id);
+
+    if(target){
+
+      a.addEventListener('click',e=>{
+
+        e.preventDefault();
+
+        window.scrollTo({
+          top:target.getBoundingClientRect().top + window.scrollY - 76,
+          behavior:'smooth'
+        });
+
+      });
+
+    }
+
+  }
+
+});
+
 </script>
 </body>
 </html>
