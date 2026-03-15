@@ -1,522 +1,178 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Liên Hệ & Đặt Bàn – THE WANN</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liên Hệ & Đặt Bàn — THE WANN Nightclub & Bar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Outfit',sans-serif;background:#080706;color:#EDE8DC;overflow-x:hidden;cursor:none}
+.pt-overlay{position:fixed;inset:0;z-index:9000;background:#080706;pointer-events:none;opacity:0;transition:opacity .35s ease}
+.pt-overlay.fade-in{opacity:1;pointer-events:all}
+.pt-bar{position:fixed;top:0;left:0;right:0;height:2px;z-index:9001;background:#D4AF6A;transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+.pt-bar.loading{transform:scaleX(.7)}.pt-bar.done{transform:scaleX(1)}
+.cur{position:fixed;width:10px;height:10px;background:#D4AF6A;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+.cur-r{position:fixed;width:36px;height:36px;border:1.5px solid rgba(212,175,106,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .12s ease}
+@media(hover:none){.cur,.cur-r{display:none}body{cursor:auto}}
+.nav{position:fixed;inset:0 0 auto;z-index:200;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;transition:all .4s;border-bottom:1px solid transparent}
+.nav.s{background:rgba(8,7,6,.97);backdrop-filter:blur(20px);padding:13px 48px;border-color:rgba(212,175,106,.1)}
+.nav-logo{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:5px;color:#D4AF6A;text-decoration:none}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(237,232,220,.5);text-decoration:none;transition:color .25s;position:relative}
+.nav-links a:hover{color:#D4AF6A}.nav-links a.active{color:#D4AF6A}
+.nav-links a.active::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:#D4AF6A}
+.nav-book{font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;background:#D4AF6A;color:#080706;padding:10px 22px;text-decoration:none;transition:background .25s}
+.nav-book:hover{background:#F0D08A}
+.ham{display:none;flex-direction:column;gap:5px;cursor:none;padding:4px}
+.ham span{display:block;width:22px;height:2px;background:#D4AF6A;border-radius:1px;transition:all .3s}
+.ham.o span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.ham.o span:nth-child(2){opacity:0}
+.ham.o span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.drawer{position:fixed;inset:0;z-index:199;background:#080706;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transform:translateX(100%);transition:transform .45s cubic-bezier(.77,0,.18,1)}
+.drawer.o{transform:translateX(0)}.drawer a{font-family:'Bebas Neue',cursive;font-size:44px;letter-spacing:4px;color:#EDE8DC;text-decoration:none}
+.drawer a:hover{color:#D4AF6A}.drawer-x{position:absolute;top:20px;right:36px;background:none;border:none;color:#D4AF6A;font-size:26px;cursor:none}
  
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.page-hero{padding:160px 48px 80px;position:relative;overflow:hidden;border-bottom:1px solid rgba(212,175,106,.08)}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(212,175,106,.04),transparent)}
+.ph-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#D4AF6A;margin-bottom:16px;display:flex;align-items:center;gap:12px;opacity:0;animation:up .6s .2s forwards}
+.ph-label::before{content:'';width:24px;height:1px;background:#D4AF6A}
+.ph-title{font-family:'Bebas Neue',cursive;font-size:clamp(60px,12vw,130px);letter-spacing:4px;color:#EDE8DC;line-height:.88;opacity:0;animation:up .8s .35s forwards}
+.ph-title span{-webkit-text-stroke:1.5px #D4AF6A;color:transparent}
+.ph-sub{font-size:18px;font-weight:300;color:rgba(237,232,220,.5);margin-top:20px;max-width:560px;opacity:0;animation:up .7s .55s forwards}
+.ph-bg{position:absolute;top:0;right:0;bottom:0;width:40%;background-image:url('https://images.unsplash.com/photo-1549492423-400259a2e574?w=1200&q=80');background-size:cover;background-position:center;opacity:.08}
  
-    :root {
-      --gold:  #c9a84c;
-      --gold2: #e8c96e;
-      --dark:  #0a0a0a;
-      --dark2: #111111;
-      --dark3: #161616;
-      --muted: #666;
-      --white: #ffffff;
-      --font-display: 'Bebas Neue', sans-serif;
-      --font-serif:   'Cormorant Garamond', serif;
-      --font-body:    'DM Sans', sans-serif;
-      --font-mono:    'DM Mono', monospace;
-    }
+.page-content{max-width:1100px;margin:0 auto;padding:80px 48px 140px}
+.slabel{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#D4AF6A;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.slabel::before{content:'';width:24px;height:1px;background:#D4AF6A}
+.stitle{font-family:'Bebas Neue',cursive;font-size:clamp(36px,6vw,60px);letter-spacing:3px;color:#EDE8DC;line-height:1}
+.stitle .a{color:#D4AF6A}
  
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--dark);
-      color: var(--white);
-      font-family: var(--font-body);
-      font-weight: 300;
-      overflow-x: hidden;
-    }
+/* CONTACT GRID */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:60px;align-items:start}
+.ctitle{font-family:'Bebas Neue',cursive;font-size:clamp(32px,5vw,50px);letter-spacing:3px;color:#EDE8DC;line-height:1;margin-bottom:14px}
+.ctitle span{color:#D4AF6A}
+.cdesc{font-size:16px;color:#6A5E50;line-height:1.8;max-width:360px;margin-bottom:34px}
+.clinks{display:flex;flex-direction:column}
+.clink{display:flex;align-items:center;gap:18px;padding:20px 0;border-bottom:1px solid rgba(212,175,106,.08);text-decoration:none;color:inherit;position:relative;transition:padding-left .3s}
+.clink::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:#D4AF6A;transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.clink:hover{padding-left:10px}.clink:hover::after{transform:scaleX(1)}
+.cico{width:48px;height:48px;border:1px solid rgba(212,175,106,.14);background:rgba(212,175,106,.04);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ccat{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#D4AF6A;margin-bottom:4px}
+.cval{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;color:#EDE8DC}
+.chint{font-family:'DM Mono',monospace;font-size:11px;color:#6A5E50;margin-top:2px}
+.carr{margin-left:auto;color:rgba(212,175,106,.28);font-size:18px;transition:transform .3s,color .3s}
+.clink:hover .carr{transform:translateX(6px);color:#D4AF6A}
+.cright{display:flex;flex-direction:column;gap:14px}
+.icard{background:#141210;border:1px solid rgba(212,175,106,.08);padding:28px;position:relative}
+.icard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,#D4AF6A,transparent)}
+.ictitle{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#D4AF6A;margin-bottom:14px}
+.ihours{display:flex;flex-direction:column;gap:10px}
+.ihr{display:flex;justify-content:space-between;align-items:baseline}
+.iday{font-family:'DM Mono',monospace;font-size:12px;color:#6A5E50}
+.itime{font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:2px;color:#EDE8DC}
+.iaddr{font-size:15px;color:#6A5E50;line-height:1.75}
+.iaddr strong{color:#EDE8DC;font-weight:600}
+.ctabox{background:#1A1714;border:1px solid rgba(212,175,106,.1);padding:30px;position:relative}
+.ctabox::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#D4AF6A}
+.ctabox-t{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:2px;color:#EDE8DC;margin-bottom:6px}
+.ctabox-s{font-size:13px;color:#6A5E50;line-height:1.65;margin-bottom:22px}
+.ctabox-b{display:flex;gap:12px;flex-wrap:wrap}
  
-    /* grain */
-    body::before {
-      content: '';
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    }
+/* MAP EMBED CARD */
+.map-card{background:#141210;border:1px solid rgba(212,175,106,.08);overflow:hidden;margin-top:60px;position:relative}
+.map-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,#D4AF6A,transparent);z-index:1}
+.map-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#D4AF6A;padding:20px 24px;background:#141210}
+.map-placeholder{height:260px;background:url('https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?w=1200&q=60') center/cover;display:flex;align-items:center;justify-content:center;position:relative}
+.map-placeholder::before{content:'';position:absolute;inset:0;background:rgba(8,7,6,.6)}
+.map-cta{position:relative;z-index:1;text-align:center}
+.map-cta-t{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:3px;color:#EDE8DC;margin-bottom:14px}
  
-    /* ─── HEADER ─── */
-    header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 48px; height: 72px;
-      background: rgba(10,10,10,.82);
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(201,168,76,.12);
-    }
-    .logo { font-family: var(--font-display); font-size: 28px; letter-spacing: .18em; color: var(--gold); text-decoration: none; }
-    .logo span { color: var(--white); }
-    nav { display: flex; gap: 36px; align-items: center; }
-    nav a { font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .25s; }
-    nav a:hover, nav a.active { color: var(--gold); }
-    .nav-cta { padding: 9px 22px; border: 1px solid var(--gold); color: var(--gold) !important; transition: background .25s, color .25s !important; }
-    .nav-cta:hover { background: var(--gold); color: var(--dark) !important; }
+.btn-g{display:inline-flex;align-items:center;gap:10px;padding:15px 34px;background:#D4AF6A;color:#080706;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;text-decoration:none;transition:background .25s,transform .2s}
+.btn-g:hover{background:#F0D08A;transform:translateY(-2px)}
+.btn-o{display:inline-flex;align-items:center;gap:10px;padding:15px 34px;border:1.5px solid rgba(237,232,220,.28);background:rgba(8,7,6,.2);color:#EDE8DC;font-family:'Outfit',sans-serif;font-size:15px;font-weight:500;text-decoration:none;transition:border-color .25s,color .25s}
+.btn-o:hover{border-color:#D4AF6A;color:#D4AF6A}
+.btn-sm{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:#D4AF6A;color:#080706;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;text-decoration:none;transition:background .25s}
+.btn-sm:hover{background:#F0D08A}
+.btn-sm-o{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border:1px solid rgba(212,175,106,.3);color:#D4AF6A;font-family:'DM Mono',monospace;font-size:11px;text-decoration:none;transition:all .25s}
+.btn-sm-o:hover{border-color:#D4AF6A;background:rgba(212,175,106,.06)}
  
-    /* ─── HERO ─── */
-    .hero {
-      position: relative;
-      height: 100svh; min-height: 560px;
-      display: flex; flex-direction: column;
-      justify-content: flex-end;
-      padding: 0 48px 80px;
-      overflow: hidden;
-    }
- 
-    /* bg map tint */
-    .hero-mapbg {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 90% 70% at 65% 50%, rgba(201,168,76,.05) 0%, transparent 65%),
-        linear-gradient(to bottom, var(--dark) 0%, rgba(10,10,10,.3) 50%, var(--dark) 100%),
-        var(--dark2);
-    }
- 
-    /* subtle grid lines */
-    .hero-grid {
-      position: absolute; inset: 0; pointer-events: none;
-      background-image:
-        linear-gradient(rgba(201,168,76,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(201,168,76,.04) 1px, transparent 1px);
-      background-size: 80px 80px;
-      mask-image: radial-gradient(ellipse 80% 80% at 60% 50%, black 0%, transparent 75%);
-    }
- 
-    /* address pin large bg text */
-    .hero-address-bg {
-      position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
-      font-family: var(--font-display); font-size: clamp(80px, 12vw, 160px);
-      letter-spacing: .04em; line-height: 1;
-      color: rgba(201,168,76,.03);
-      white-space: nowrap; pointer-events: none;
-      user-select: none;
-    }
- 
-    .hero-content { position: relative; z-index: 1; max-width: 1320px; width: 100%; }
- 
-    .hero-pin {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-family: var(--font-mono); font-size: 11px; letter-spacing: .22em;
-      text-transform: uppercase; color: var(--gold);
-      border: 1px solid rgba(201,168,76,.25); padding: 7px 16px;
-      margin-bottom: 28px;
-      animation: fadeUp .8s ease both;
-    }
-    .hero-pin::before { content: '◎'; font-size: 10px; }
- 
-    .hero-title {
-      font-family: var(--font-display);
-      font-size: clamp(72px, 13vw, 170px);
-      line-height: .87; letter-spacing: .04em;
-      color: var(--white);
-      animation: fadeUp .9s .1s ease both;
-    }
-    .hero-title .gold { color: var(--gold); }
-    .hero-title .stroke {
-      -webkit-text-stroke: 1px rgba(201,168,76,.45);
-      color: transparent;
-    }
- 
-    .hero-row {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      gap: 40px; margin-top: 32px;
-      animation: fadeUp .9s .25s ease both;
-    }
-    .hero-sub {
-      font-family: var(--font-serif); font-style: italic;
-      font-size: clamp(17px, 2vw, 24px);
-      color: rgba(255,255,255,.38); max-width: 440px; line-height: 1.65;
-    }
-    .hero-addr {
-      text-align: right;
-      font-family: var(--font-mono); font-size: 11px; letter-spacing: .15em;
-      color: rgba(201,168,76,.5); line-height: 1.9;
-    }
- 
-    /* ─── DIVIDER LINE ─── */
-    .divider-line {
-      position: relative; z-index: 1;
-      height: 1px; background: rgba(201,168,76,.1);
-    }
- 
-    /* ─── MAIN GRID ─── */
-    .contact-main {
-      position: relative; z-index: 1;
-      display: grid; grid-template-columns: 1fr 1fr;
-      max-width: 1400px; margin: 0 auto;
-      padding: 0 48px;
-    }
- 
-    /* ─── LEFT: contact links ─── */
-    .cleft {
-      padding: 100px 80px 100px 0;
-      border-right: 1px solid rgba(201,168,76,.08);
-    }
- 
-    .slabel { font-size: 10px; font-weight: 500; letter-spacing: .35em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; display: block; }
- 
-    .ctitle {
-      font-family: var(--font-display);
-      font-size: clamp(52px, 7vw, 96px);
-      line-height: .9; letter-spacing: .04em;
-      color: var(--white); margin-bottom: 28px;
-    }
-    .ctitle span { color: var(--gold); }
- 
-    .cdesc {
-      font-family: var(--font-serif); font-style: italic;
-      font-size: 19px; line-height: 1.75;
-      color: rgba(255,255,255,.42);
-      margin-bottom: 56px; max-width: 420px;
-    }
- 
-    /* contact links */
-    .clinks { display: flex; flex-direction: column; gap: 2px; }
- 
-    .clink {
-      display: flex; align-items: center; gap: 20px;
-      padding: 24px 24px 24px 28px;
-      background: var(--dark2);
-      text-decoration: none; color: inherit;
-      border-left: 2px solid transparent;
-      transition: background .3s, border-color .3s;
-      position: relative; overflow: hidden;
-    }
-    .clink::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(90deg, rgba(201,168,76,.04) 0%, transparent 60%);
-      opacity: 0; transition: opacity .3s;
-    }
-    .clink:hover { background: var(--dark3); border-left-color: var(--gold); }
-    .clink:hover::before { opacity: 1; }
- 
-    .cico {
-      font-size: 26px; width: 48px; height: 48px;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(201,168,76,.07); flex-shrink: 0;
-      filter: saturate(0) brightness(1.4);
-      transition: filter .3s, background .3s;
-    }
-    .clink:hover .cico { filter: saturate(1) brightness(1); background: rgba(201,168,76,.12); }
- 
-    .clink-body { flex: 1; }
-    .ccat { font-size: 10px; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
-    .cval { font-family: var(--font-display); font-size: 24px; letter-spacing: .05em; color: var(--white); line-height: 1.2; }
-    .chint { font-size: 12px; color: rgba(255,255,255,.35); margin-top: 4px; letter-spacing: .02em; }
- 
-    .carr {
-      font-size: 18px; color: rgba(201,168,76,.3);
-      transition: color .3s, transform .3s;
-      flex-shrink: 0;
-    }
-    .clink:hover .carr { color: var(--gold); transform: translateX(4px); }
- 
-    /* ─── RIGHT: info cards ─── */
-    .cright {
-      padding: 100px 0 100px 80px;
-      display: flex; flex-direction: column; gap: 2px;
-    }
- 
-    .icard {
-      background: var(--dark2);
-      padding: 36px 40px;
-      position: relative; overflow: hidden;
-    }
-    .icard::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, var(--gold), transparent);
-      opacity: .3;
-    }
- 
-    .ictitle {
-      font-family: var(--font-display); font-size: 13px;
-      letter-spacing: .25em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 24px;
-    }
- 
-    /* hours */
-    .ihours { display: flex; flex-direction: column; gap: 12px; }
-    .ihr {
-      display: flex; justify-content: space-between; align-items: center;
-      padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-    .ihr:last-child { border-bottom: none; padding-bottom: 0; }
-    .iday { font-size: 13px; color: rgba(255,255,255,.5); letter-spacing: .05em; }
-    .itime { font-family: var(--font-display); font-size: 22px; letter-spacing: .06em; color: var(--white); }
- 
-    .open-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
-      color: #4caf81; margin-bottom: 20px;
-    }
-    .open-badge::before {
-      content: '';
-      width: 6px; height: 6px; border-radius: 50%; background: #4caf81;
-      box-shadow: 0 0 0 3px rgba(76,175,129,.2);
-      animation: blink 2s ease-in-out infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
- 
-    /* address */
-    .iaddr {
-      font-size: 15px; line-height: 1.85; color: rgba(255,255,255,.5);
-    }
-    .iaddr strong { color: var(--white); font-weight: 400; font-family: var(--font-display); font-size: 20px; letter-spacing: .04em; display: block; margin-bottom: 4px; }
-    .map-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      margin-top: 16px;
-      font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em;
-      text-transform: uppercase; color: var(--gold); text-decoration: none;
-      transition: opacity .25s;
-    }
-    .map-link:hover { opacity: .7; }
- 
-    /* CTA box */
-    .ctabox {
-      background: var(--dark2);
-      border: 1px solid rgba(201,168,76,.2);
-      padding: 36px 40px;
-      position: relative; overflow: hidden;
-    }
-    .ctabox::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 70% 70% at 80% 80%, rgba(201,168,76,.04) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .ctabox-t {
-      font-family: var(--font-display); font-size: 28px;
-      letter-spacing: .05em; color: var(--white); margin-bottom: 10px; line-height: 1.1;
-    }
-    .ctabox-s {
-      font-size: 13px; line-height: 1.75; color: rgba(255,255,255,.42);
-      margin-bottom: 28px;
-    }
-    .ctabox-b { display: flex; gap: 10px; flex-wrap: wrap; }
-    .btn-g {
-      flex: 1; min-width: 140px;
-      display: inline-block; padding: 14px 20px; text-align: center;
-      background: var(--gold); color: var(--dark);
-      font-size: 11px; font-weight: 500; letter-spacing: .2em;
-      text-transform: uppercase; text-decoration: none;
-      transition: background .3s, color .3s;
-    }
-    .btn-g:hover { background: var(--gold2); }
-    .btn-o {
-      flex: 1; min-width: 140px;
-      display: inline-block; padding: 14px 20px; text-align: center;
-      background: transparent; color: var(--white);
-      font-size: 11px; font-weight: 500; letter-spacing: .2em;
-      text-transform: uppercase; text-decoration: none;
-      border: 1px solid rgba(255,255,255,.18);
-      transition: border-color .3s, color .3s;
-    }
-    .btn-o:hover { border-color: var(--gold); color: var(--gold); }
- 
-    /* ─── MAP EMBED SECTION ─── */
-    .map-section {
-      position: relative; z-index: 1;
-      height: 400px; overflow: hidden;
-      border-top: 1px solid rgba(201,168,76,.08);
-    }
-    .map-section iframe {
-      width: 100%; height: 100%; border: none; display: block;
-      filter: grayscale(1) invert(1) brightness(.7) contrast(1.1);
-      transition: filter .5s;
-    }
-    .map-section:hover iframe { filter: grayscale(.5) invert(.8) brightness(.8); }
-    .map-overlay {
-      position: absolute; top: 28px; left: 48px; z-index: 2;
-      background: rgba(10,10,10,.9); backdrop-filter: blur(12px);
-      border: 1px solid rgba(201,168,76,.25);
-      padding: 16px 24px;
-    }
-    .map-overlay-name {
-      font-family: var(--font-display); font-size: 18px;
-      letter-spacing: .08em; color: var(--gold); line-height: 1;
-    }
-    .map-overlay-addr {
-      font-size: 11px; color: rgba(255,255,255,.45);
-      letter-spacing: .05em; margin-top: 4px;
-    }
- 
-    /* ─── FAQ ─── */
-    .faq-section {
-      position: relative; z-index: 1;
-      padding: 100px 48px;
-      max-width: 1400px; margin: 0 auto;
-    }
-    .faq-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 2px; margin-top: 56px;
-    }
-    .faq-item {
-      background: var(--dark2); padding: 32px 36px;
-      border-left: 2px solid transparent;
-      transition: background .3s, border-color .3s;
-      cursor: default;
-    }
-    .faq-item:hover { background: var(--dark3); border-left-color: rgba(201,168,76,.4); }
-    .faq-q {
-      font-family: var(--font-display); font-size: 20px;
-      letter-spacing: .04em; color: var(--white); margin-bottom: 10px; line-height: 1.2;
-    }
-    .faq-a { font-size: 13px; line-height: 1.75; color: rgba(255,255,255,.4); }
- 
-    /* ─── FOOTER ─── */
-    footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid rgba(201,168,76,.1);
-      padding: 48px; display: flex;
-      justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;
-    }
-    .foot-logo { font-family: var(--font-display); font-size: 22px; letter-spacing: .18em; color: var(--gold); }
-    .foot-logo span { color: var(--white); }
-    .foot-links { display: flex; gap: 28px; }
-    .foot-links a { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .25s; }
-    .foot-links a:hover { color: var(--gold); }
-    .foot-info { font-size: 12px; color: var(--muted); line-height: 1.8; text-align: right; }
- 
-    /* ─── ANIMATIONS ─── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .rv { opacity: 0; transform: translateY(32px); transition: opacity .75s ease, transform .75s ease; }
-    .rv.in { opacity: 1; transform: translateY(0); }
-    .rv-d1 { transition-delay: .14s; }
-    .rv-d2 { transition-delay: .28s; }
-    .rv-d3 { transition-delay: .42s; }
- 
-    /* ─── MOBILE ─── */
-    @media (max-width: 960px) {
-      header { padding: 0 20px; }
-      nav { display: none; }
-      .hero { padding: 0 20px 60px; }
-      .hero-addr { display: none; }
-      .contact-main { grid-template-columns: 1fr; padding: 0 20px; }
-      .cleft { padding: 64px 0; border-right: none; border-bottom: 1px solid rgba(201,168,76,.08); }
-      .cright { padding: 64px 0; }
-      .map-section { height: 300px; }
-      .map-overlay { left: 20px; }
-      .faq-section { padding: 80px 20px; }
-      .faq-grid { grid-template-columns: 1fr; }
-      footer { flex-direction: column; align-items: flex-start; }
-      .foot-info { text-align: left; }
-    }
- 
-  .menu-toggle{
-  width:30px;
-  height:22px;
-  display:none;
-  flex-direction:column;
-  justify-content:space-between;
-  cursor:pointer;
+footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52px 48px 110px}
+.ftop{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;flex-wrap:wrap;gap:20px}
+.flogo{font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:6px;color:#D4AF6A}
+.fmotto{font-size:14px;color:#6A5E50;font-style:italic;margin-top:4px}
+.fsocs{display:flex;gap:10px}
+.fsoc{width:42px;height:42px;border:1px solid rgba(212,175,106,.15);display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;color:#6A5E50;transition:all .25s}
+.fsoc:hover{border-color:#D4AF6A;color:#D4AF6A;background:rgba(212,175,106,.06)}
+.fbot{max-width:1280px;margin:0 auto;border-top:1px solid rgba(212,175,106,.06);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:'DM Mono',monospace;font-size:11px;color:#6A5E50;letter-spacing:1px}
+.fbar{position:fixed;bottom:0;left:0;right:0;z-index:198;background:rgba(8,7,6,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(212,175,106,.13);padding:13px 48px}
+.fbar-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.fbar-txt{flex:1;min-width:0}
+.fbar-t{font-family:'Bebas Neue',cursive;font-size:15px;letter-spacing:3px;color:#D4AF6A}
+.fbar-s{font-family:'DM Mono',monospace;font-size:10px;color:#6A5E50;letter-spacing:1px;margin-top:2px}
+.fbar-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:#D4AF6A;color:#080706;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:background .25s}
+.fbar-btn:hover{background:#F0D08A}
+.fbar-tel{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border:1px solid rgba(212,175,106,.25);color:#D4AF6A;font-family:'DM Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap;transition:all .25s}
+.fbar-tel:hover{border-color:#D4AF6A;background:rgba(212,175,106,.06)}
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}.rv.on{opacity:1;transform:translateY(0)}
+@media(max-width:960px){
+  .nav{padding:14px 24px}.nav.s{padding:12px 24px}.nav-links,.nav-book{display:none}.ham{display:flex}
+  .page-hero{padding:120px 24px 60px}.page-content{padding:60px 24px 120px}
+  .cgrid{grid-template-columns:1fr;gap:44px}
+  .ctabox-b{flex-direction:column}
+  footer{padding:44px 24px 110px}.ftop{flex-direction:column;align-items:flex-start}.fbot{flex-direction:column}
+  .fbar{padding:12px 20px}.fbar-txt{display:none}
 }
-
-.menu-toggle span{
-  display:block;
-  height:3px;
-  background:#c9a96a;
-  border-radius:2px;
-}
-
-/* Mobile */
-@media (max-width:768px){
-
-  nav{
-    position:absolute;
-    top:80px;
-    right:0;
-    background:#000;
-    width:220px;
-    display:flex;
-    flex-direction:column;
-    padding:20px;
-    transform:translateX(100%);
-    transition:0.3s;
-  }
-
-  nav a{
-    margin:10px 0;
-  }
-
-  nav.show{
-    transform:translateX(0);
-  }
-
-  .menu-toggle{
-    display:flex;
-  }
-}
-  </style>
+</style>
 </head>
 <body>
+<div class="pt-overlay" id="pt-overlay"></div>
+<div class="pt-bar" id="pt-bar"></div>
+<div class="cur" id="cur"></div><div class="cur-r" id="cur-r"></div>
  
-  <!-- HEADER -->
-<header>
-  <a href="index.html" class="logo">THE <span>WANN</span></a>
-
-  <nav id="navMenu">
-    <a href="index.html">Trang Chủ</a>
-    <a href="about.html">Về Chúng Tôi</a>
-    <a href="offers.html">Ưu Đãi</a>
-    <a href="index.html#events">Sự Kiện</a>
-    <a href="contact.html" class="active nav-cta">Đặt Bàn</a>
-  </nav>
-
-  <!-- Hamburger -->
-  <div class="menu-toggle" id="menuToggle">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
+<div class="drawer" id="drawer">
+  <button class="drawer-x" id="drawer-x">✕</button>
+  <a href="index.html">Trang Chủ</a>
+  <a href="offers.html">Ưu Đãi</a>
+  <a href="about.html">About</a>
+  <a href="menu.html">Menu</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="contact.html">Liên Hệ</a>
+</div>
+ 
+<header class="nav" id="nav">
+  <a href="index.html" class="nav-logo">THE WANN</a>
+  <ul class="nav-links">
+    <li><a href="offers.html">Ưu đãi</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="menu.html">Menu</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="contact.html" class="active">Liên hệ</a></li>
+  </ul>
+  <a href="contact.html" class="nav-book" style="background:#E84A20;color:#fff">Đặt Bàn Ngay</a>
+  <div class="ham" id="ham" onclick="tD()"><span></span><span></span><span></span></div>
 </header>
  
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-mapbg"></div>
-    <div class="hero-grid"></div>
-    <div class="hero-address-bg">51 BÙI THỊ XUÂN</div>
-    <div class="hero-content">
-      <div class="hero-pin">51 Bùi Thị Xuân · Quận 1 · TP.HCM</div>
-      <h1 class="hero-title">
-        ĐẶT BÀN &amp;<br/>
-        <span class="gold">KẾT</span> <span class="stroke">NỐI</span>
-      </h1>
-      <div class="hero-row">
-        <p class="hero-sub">Liên hệ trực tiếp — phản hồi nhanh, tư vấn combo phù hợp nhóm của bạn.</p>
-        <div class="hero-addr">
-          Điện thoại / Zalo<br/>
-          0902 734 576<br/>
-          Mở cửa 20:00 – 04:00
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="page-hero">
+  <div class="ph-bg"></div>
+  <div class="ph-label">Đặt Bàn & Liên Hệ</div>
+  <div class="ph-title">Kết <span>Nối</span></div>
+  <p class="ph-sub">Phản hồi nhanh trong vòng 30 phút. Tư vấn combo & bàn VIP cho nhóm của bạn.</p>
+</div>
  
-  <div class="divider-line"></div>
- 
-  <!-- MAIN CONTACT -->
-  <div class="contact-main">
- 
-    <!-- LEFT -->
-    <div class="cleft rv">
-      <span class="slabel">Liên Hệ</span>
-      <h2 class="ctitle">Đặt Bàn &amp;<br/><span>Kết Nối</span></h2>
+<div class="page-content">
+  <div class="cgrid">
+    <div class="rv">
+      <div class="slabel">Liên Hệ Trực Tiếp</div>
+      <div class="ctitle">Đặt Bàn &<br><span>Kết Nối</span></div>
       <p class="cdesc">Liên hệ trực tiếp qua điện thoại, Zalo hoặc Facebook — phản hồi nhanh, tư vấn combo phù hợp nhóm.</p>
- 
       <div class="clinks">
         <a href="tel:0902734576" class="clink">
           <div class="cico">📞</div>
-          <div class="clink-body">
+          <div>
             <div class="ccat">Điện thoại / Zalo</div>
             <div class="cval">0902 734 576</div>
             <div class="chint">Gọi hoặc nhắn Zalo trực tiếp</div>
@@ -525,7 +181,7 @@
         </a>
         <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="clink">
           <div class="cico">📘</div>
-          <div class="clink-body">
+          <div>
             <div class="ccat">Facebook</div>
             <div class="cval">Hữu Viên · The Wann</div>
             <div class="chint">Inbox đặt bàn nhanh nhất</div>
@@ -534,7 +190,7 @@
         </a>
         <a href="https://zalo.me/0902734576" target="_blank" class="clink">
           <div class="cico">💬</div>
-          <div class="clink-body">
+          <div>
             <div class="ccat">Zalo</div>
             <div class="cval">0902 734 576</div>
             <div class="chint">Chat trực tiếp · 24/7</div>
@@ -544,145 +200,76 @@
       </div>
     </div>
  
-    <!-- RIGHT -->
-    <div class="cright rv rv-d1">
- 
+    <div class="cright rv">
       <div class="icard">
-        <div class="open-badge">Đang mở cửa</div>
         <div class="ictitle">Giờ Mở Cửa</div>
         <div class="ihours">
-          <div class="ihr">
-            <span class="iday">Thứ 2 – Thứ 5</span>
-            <span class="itime">21:00 – 04:00</span>
-          </div>
-          <div class="ihr">
-            <span class="iday">Thứ 6 – Chủ Nhật</span>
-            <span class="itime">20:00 – 04:00</span>
-          </div>
+          <div class="ihr"><span class="iday">Thứ 2 – Thứ 5</span><span class="itime">21:00 – 04:00</span></div>
+          <div class="ihr"><span class="iday">Thứ 6 – Chủ Nhật</span><span class="itime">20:00 – 04:00</span></div>
         </div>
       </div>
- 
       <div class="icard">
         <div class="ictitle">Địa Chỉ</div>
-        <p class="iaddr">
-          <strong>THE WANN Nightclub &amp; Bar</strong>
-          51 Bùi Thị Xuân, P. Phạm Ngũ Lão<br/>
-          Quận 1, TP. Hồ Chí Minh
-        </p>
-        <a href="https://maps.google.com/?q=51+Bui+Thi+Xuan+Quan+1+HCM" target="_blank" class="map-link">
-          ◎ Xem Google Maps →
-        </a>
+        <p class="iaddr"><strong>THE WANN Nightclub & Bar</strong><br>51 Bùi Thị Xuân, P. Phạm Ngũ Lão<br>Quận 1, TP. Hồ Chí Minh</p>
+        <a href="https://maps.google.com/?q=51+Bui+Thi+Xuan+Quan+1+HCM" target="_blank"
+           style="display:inline-block;margin-top:14px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#D4AF6A;text-decoration:none">Xem Google Maps →</a>
       </div>
- 
       <div class="ctabox">
         <div class="ctabox-t">🔥 Book Ngay — Nhận Ưu Đãi</div>
         <div class="ctabox-s">Tặng combo 800K + Giảm 10% bill. Hiệu lực cả tháng 3. Số lượng bàn VIP có hạn.</div>
         <div class="ctabox-b">
-          <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="btn-g">📘 Nhắn Facebook</a>
-          <a href="tel:0902734576" class="btn-o">📞 0902 734 576</a>
+          <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="btn-sm">📘 Nhắn Facebook</a>
+          <a href="tel:0902734576" class="btn-sm-o">📞 0902 734 576</a>
         </div>
       </div>
- 
     </div>
   </div>
  
   <!-- MAP -->
-  <div class="map-section rv">
-    <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4!2d106.6974!3d10.7769!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f3a9d8d4f05%3A0x0!2s51+B%C3%B9i+Th%E1%BB%8B+Xu%C3%A2n%2C+Ph%C6%B0%E1%BB%9Dng+Ph%E1%BA%A1m+Ng%C5%A9+L%C3%A3o%2C+Qu%E1%BA%ADn+1%2C+Th%C3%A0nh+ph%E1%BB%91+H%E1%BB%93+Ch%C3%AD+Minh%2C+Vietnam!5e0!3m2!1sen!2s!4v1"
-      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-      title="THE WANN location map">
-    </iframe>
-    <div class="map-overlay">
-      <div class="map-overlay-name">THE WANN</div>
-      <div class="map-overlay-addr">51 Bùi Thị Xuân · Quận 1</div>
+  <div class="map-card rv">
+    <div class="map-label">📍 51 Bùi Thị Xuân, Quận 1, TP.HCM</div>
+    <div class="map-placeholder">
+      <div class="map-cta">
+        <div class="map-cta-t">Tìm Đường Đến THE WANN</div>
+        <a href="https://maps.google.com/?q=51+Bui+Thi+Xuan+Quan+1+HCM" target="_blank" class="btn-g">🗺 Mở Google Maps</a>
+      </div>
     </div>
   </div>
+</div>
  
-  <!-- FAQ -->
-  <section class="faq-section">
-    <div class="rv">
-      <span class="slabel">Câu Hỏi Thường Gặp</span>
-      <h2 style="font-family: var(--font-display); font-size: clamp(44px,6vw,86px); line-height:.92; letter-spacing:.04em; color: var(--white);">
-        Bạn Muốn <span style="color:var(--gold)">Biết</span> Gì?
-      </h2>
+<footer>
+  <div class="ftop">
+    <div><div class="flogo">THE WANN</div><div class="fmotto">"Where the night truly begins"</div></div>
+    <div class="fsocs">
+      <a href="tel:0902734576" class="fsoc">📞</a>
+      <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="fsoc">📘</a>
+      <a href="https://zalo.me/0902734576" target="_blank" class="fsoc">💬</a>
     </div>
-    <div class="faq-grid">
-      <div class="faq-item rv rv-d1">
-        <div class="faq-q">Có cần đặt bàn trước không?</div>
-        <p class="faq-a">Không bắt buộc, nhưng đặt trước qua hotline giúp đảm bảo bàn VIP view đẹp và nhận ưu đãi combo 800K miễn phí khi check-in trước 20:30.</p>
-      </div>
-      <div class="faq-item rv rv-d2">
-        <div class="faq-q">Có giới hạn số người mỗi bàn không?</div>
-        <p class="faq-a">Mỗi bàn phù hợp từ 4–10 khách tùy vị trí. Nhóm lớn hơn vui lòng liên hệ trực tiếp để được sắp xếp bàn ghép hoặc khu vực riêng.</p>
-      </div>
-      <div class="faq-item rv rv-d1">
-        <div class="faq-q">Dress code tại THE WANN là gì?</div>
-        <p class="faq-a">Smart casual trở lên. Không áp dụng cho trang phục quá thể thao (flip-flop, tank top, shorts). THE WANN là không gian đẳng cấp — ăn mặc phù hợp là cách thể hiện sự tôn trọng.</p>
-      </div>
-      <div class="faq-item rv rv-d2">
-        <div class="faq-q">Ưu đãi tháng 3 áp dụng tất cả các ngày không?</div>
-        <p class="faq-a">Áp dụng Thứ 5 đến Chủ Nhật trong suốt tháng 3/2025. Combo tặng 800K áp dụng khi check-in trước 20:30. Giảm giá bill cộng dồn được.</p>
-      </div>
-      <div class="faq-item rv rv-d1">
-        <div class="faq-q">Có chỗ gửi xe không?</div>
-        <p class="faq-a">Có bãi giữ xe gần venue. Ngoài ra khu vực Bùi Thị Xuân có nhiều điểm giữ xe đêm trong bán kính 200m. Uber/Grab là lựa chọn tiện nhất.</p>
-      </div>
-      <div class="faq-item rv rv-d2">
-        <div class="faq-q">Tổ chức sinh nhật, sự kiện riêng được không?</div>
-        <p class="faq-a">Hoàn toàn được. THE WANN nhận tổ chức sinh nhật, party nhỏ, sự kiện doanh nghiệp. Liên hệ hotline để được tư vấn package phù hợp.</p>
-      </div>
-    </div>
-  </section>
- 
-  <!-- FOOTER -->
-  <footer>
-    <div class="foot-logo">THE <span>WANN</span></div>
-    <div class="foot-links">
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="offers.html">Ưu Đãi</a>
-    </div>
-    <div class="foot-info">
-      51 Bùi Thị Xuân, Quận 1, TP. Hồ Chí Minh<br/>
-      © 2025 THE WANN. All rights reserved.
-    </div>
-  </footer>
+  </div>
+  <div class="fbot">
+    <span>© 2026 THE WANN Nightclub & Bar · 51 Bùi Thị Xuân, Q.1, TP.HCM</span>
+    <span>Food · Drink · Music</span>
+  </div>
+</footer>
+<div class="fbar"><div class="fbar-in">
+  <div class="fbar-txt"><div class="fbar-t">🌟 THÁNG 3 RỰC RỠ — COMBO 800K MIỄN PHÍ</div><div class="fbar-s">Giảm thêm 10% bill · Còn hiệu lực cả tháng 3</div></div>
+  <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="fbar-btn">📘 Đặt Bàn</a>
+  <a href="tel:0902734576" class="fbar-tel">📞 Gọi</a>
+</div></div>
  
 <script>
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in');
-      io.unobserve(e.target);
-    }
-  });
-},{ threshold:0.1 });
-
-document.querySelectorAll('.rv').forEach(el => io.observe(el));
-
-const badge = document.querySelector('.open-badge');
-if (badge){
-  const now = new Date();
-  const h = now.getHours();
-  const day = now.getDay();
-
-  const isWeekend = day === 5 || day === 6 || day === 0;
-  const openHour = isWeekend ? 20 : 21;
-
-  const isOpen = h >= openHour || h < 4;
-
-  badge.textContent = isOpen ? "● Đang mở cửa" : "● Hiện đang đóng cửa";
-  badge.style.color = isOpen ? "#4caf81" : "#888";
-}
-
-/* hamburger */
-const toggle = document.getElementById("menuToggle");
-const nav = document.getElementById("navMenu");
-
-if(toggle){
-  toggle.onclick = () => nav.classList.toggle("show");
-}
+const overlay=document.getElementById('pt-overlay'),bar=document.getElementById('pt-bar');
+function navigateTo(url){bar.classList.add('loading');overlay.classList.add('fade-in');setTimeout(()=>bar.classList.add('done'),200);setTimeout(()=>window.location.href=url,400)}
+document.querySelectorAll('a[href]').forEach(a=>{const h=a.getAttribute('href');if(h&&!h.startsWith('http')&&!h.startsWith('tel:')&&!h.startsWith('#')&&h.endsWith('.html')){a.addEventListener('click',e=>{e.preventDefault();navigateTo(h)})}});
+window.addEventListener('pageshow',()=>{overlay.classList.remove('fade-in');bar.classList.remove('loading','done')});
+const isMobile=window.innerWidth<=768;
+if(!isMobile){const C=document.getElementById('cur'),R=document.getElementById('cur-r');let mx=0,my=0,rx=0,ry=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;if(C){C.style.left=mx+'px';C.style.top=my+'px'}if(R){R.style.left=rx+'px';R.style.top=ry+'px'}requestAnimationFrame(loop)})()}
+const nav=document.getElementById('nav');window.addEventListener('scroll',()=>nav.classList.toggle('s',window.scrollY>60));
+function tD(){document.getElementById('drawer').classList.toggle('o');document.getElementById('ham').classList.toggle('o')}
+function cD(){document.getElementById('drawer').classList.remove('o');document.getElementById('ham').classList.remove('o')}
+document.getElementById('drawer-x').addEventListener('click',cD);
+const ro=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('on'),i*70)})},{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
 </script>
 </body>
 </html>
