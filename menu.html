@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu — THE WANN Nightclub & Bar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Outfit',sans-serif;background:#080706;color:#EDE8DC;overflow-x:hidden;cursor:none}
+.pt-overlay{position:fixed;inset:0;z-index:9000;background:#080706;pointer-events:none;opacity:0;transition:opacity .35s ease}
+.pt-overlay.fade-in{opacity:1;pointer-events:all}
+.pt-bar{position:fixed;top:0;left:0;right:0;height:2px;z-index:9001;background:#D4AF6A;transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+.pt-bar.loading{transform:scaleX(.7)}.pt-bar.done{transform:scaleX(1)}
+.cur{position:fixed;width:10px;height:10px;background:#D4AF6A;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+.cur-r{position:fixed;width:36px;height:36px;border:1.5px solid rgba(212,175,106,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .12s ease}
+@media(hover:none){.cur,.cur-r{display:none}body{cursor:auto}}
+.nav{position:fixed;inset:0 0 auto;z-index:200;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;transition:all .4s;border-bottom:1px solid transparent}
+.nav.s{background:rgba(8,7,6,.97);backdrop-filter:blur(20px);padding:13px 48px;border-color:rgba(212,175,106,.1)}
+.nav-logo{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:5px;color:#D4AF6A;text-decoration:none}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(237,232,220,.5);text-decoration:none;transition:color .25s;position:relative}
+.nav-links a:hover{color:#D4AF6A}.nav-links a.active{color:#D4AF6A}
+.nav-links a.active::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:#D4AF6A}
+.nav-book{font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;background:#D4AF6A;color:#080706;padding:10px 22px;text-decoration:none;transition:background .25s}
+.nav-book:hover{background:#F0D08A}
+.ham{display:none;flex-direction:column;gap:5px;cursor:none;padding:4px}
+.ham span{display:block;width:22px;height:2px;background:#D4AF6A;border-radius:1px;transition:all .3s}
+.ham.o span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.ham.o span:nth-child(2){opacity:0}
+.ham.o span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.drawer{position:fixed;inset:0;z-index:199;background:#080706;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transform:translateX(100%);transition:transform .45s cubic-bezier(.77,0,.18,1)}
+.drawer.o{transform:translateX(0)}.drawer a{font-family:'Bebas Neue',cursive;font-size:44px;letter-spacing:4px;color:#EDE8DC;text-decoration:none}
+.drawer a:hover{color:#D4AF6A}.drawer-x{position:absolute;top:20px;right:36px;background:none;border:none;color:#D4AF6A;font-size:26px;cursor:none}
+ 
+.page-hero{padding:160px 48px 80px;position:relative;overflow:hidden;border-bottom:1px solid rgba(212,175,106,.08)}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(212,175,106,.04),transparent)}
+.ph-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#D4AF6A;margin-bottom:16px;display:flex;align-items:center;gap:12px;opacity:0;animation:up .6s .2s forwards}
+.ph-label::before{content:'';width:24px;height:1px;background:#D4AF6A}
+.ph-title{font-family:'Bebas Neue',cursive;font-size:clamp(60px,12vw,130px);letter-spacing:4px;color:#EDE8DC;line-height:.88;opacity:0;animation:up .8s .35s forwards}
+.ph-title span{-webkit-text-stroke:1.5px #D4AF6A;color:transparent}
+.ph-sub{font-size:18px;font-weight:300;color:rgba(237,232,220,.5);margin-top:20px;max-width:560px;opacity:0;animation:up .7s .55s forwards}
+.ph-bg{position:absolute;top:0;right:0;bottom:0;width:40%;background-image:url('https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=1200&q=80');background-size:cover;background-position:center;opacity:.08}
+ 
+.page-content{max-width:1280px;margin:0 auto;padding:80px 48px 140px}
+.slabel{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#D4AF6A;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.slabel::before{content:'';width:24px;height:1px;background:#D4AF6A}
+.stitle{font-family:'Bebas Neue',cursive;font-size:clamp(36px,6vw,60px);letter-spacing:3px;color:#EDE8DC;line-height:1}
+.stitle .a{color:#D4AF6A}
+ 
+/* MENU */
+.msec{margin-top:60px}
+.msec+.msec{margin-top:56px}
+.mlist{display:flex;flex-direction:column;margin-top:28px}
+.mrow{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:24px 0;border-bottom:1px solid rgba(212,175,106,.08);position:relative;cursor:none;transition:padding-left .3s}
+.mrow::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:#D4AF6A;transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.mrow:hover{padding-left:14px}.mrow:hover::after{transform:scaleX(1)}
+.mname{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;color:#EDE8DC}
+.msub{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;color:#6A5E50;margin-top:4px}
+.mright{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.mprice{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:2px;color:#D4AF6A}
+.mbadge{padding:4px 10px;background:rgba(232,74,32,.12);border:1px solid rgba(232,74,32,.3);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E84A20}
+.mbadge.gold{background:rgba(212,175,106,.1);border-color:rgba(212,175,106,.3);color:#D4AF6A}
+ 
+/* CTA */
+.cta-band{margin-top:60px;background:linear-gradient(135deg,#160804,#0D0B09);border:1px solid rgba(212,175,106,.1);padding:56px 48px;text-align:center;position:relative;overflow:hidden}
+.cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(232,74,32,.05),transparent)}
+.cta-t{font-family:'Bebas Neue',cursive;font-size:clamp(36px,6vw,64px);letter-spacing:3px;color:#EDE8DC;line-height:1}
+.cta-t span{color:#D4AF6A}
+.cta-s{font-size:16px;color:rgba(237,232,220,.5);margin:14px 0 32px}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-g{display:inline-flex;align-items:center;gap:10px;padding:15px 34px;background:#D4AF6A;color:#080706;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;text-decoration:none;transition:background .25s,transform .2s}
+.btn-g:hover{background:#F0D08A;transform:translateY(-2px)}
+.btn-o{display:inline-flex;align-items:center;gap:10px;padding:15px 34px;border:1.5px solid rgba(237,232,220,.28);background:rgba(8,7,6,.2);color:#EDE8DC;font-family:'Outfit',sans-serif;font-size:15px;font-weight:500;text-decoration:none;transition:border-color .25s,color .25s}
+.btn-o:hover{border-color:#D4AF6A;color:#D4AF6A}
+ 
+footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52px 48px 110px}
+.ftop{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;flex-wrap:wrap;gap:20px}
+.flogo{font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:6px;color:#D4AF6A}
+.fmotto{font-size:14px;color:#6A5E50;font-style:italic;margin-top:4px}
+.fsocs{display:flex;gap:10px}
+.fsoc{width:42px;height:42px;border:1px solid rgba(212,175,106,.15);display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;color:#6A5E50;transition:all .25s}
+.fsoc:hover{border-color:#D4AF6A;color:#D4AF6A;background:rgba(212,175,106,.06)}
+.fbot{max-width:1280px;margin:0 auto;border-top:1px solid rgba(212,175,106,.06);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:'DM Mono',monospace;font-size:11px;color:#6A5E50;letter-spacing:1px}
+.fbar{position:fixed;bottom:0;left:0;right:0;z-index:198;background:rgba(8,7,6,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(212,175,106,.13);padding:13px 48px}
+.fbar-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.fbar-txt{flex:1;min-width:0}
+.fbar-t{font-family:'Bebas Neue',cursive;font-size:15px;letter-spacing:3px;color:#D4AF6A}
+.fbar-s{font-family:'DM Mono',monospace;font-size:10px;color:#6A5E50;letter-spacing:1px;margin-top:2px}
+.fbar-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:#D4AF6A;color:#080706;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:background .25s}
+.fbar-btn:hover{background:#F0D08A}
+.fbar-tel{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border:1px solid rgba(212,175,106,.25);color:#D4AF6A;font-family:'DM Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap;transition:all .25s}
+.fbar-tel:hover{border-color:#D4AF6A;background:rgba(212,175,106,.06)}
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}.rv.on{opacity:1;transform:translateY(0)}
+@media(max-width:960px){
+  .nav{padding:14px 24px}.nav.s{padding:12px 24px}.nav-links,.nav-book{display:none}.ham{display:flex}
+  .page-hero{padding:120px 24px 60px}.page-content{padding:60px 24px 120px}
+  .cta-band{padding:44px 24px}
+  footer{padding:44px 24px 110px}.ftop{flex-direction:column;align-items:flex-start}.fbot{flex-direction:column}
+  .fbar{padding:12px 20px}.fbar-txt{display:none}
+}
+</style>
+</head>
+<body>
+<div class="pt-overlay" id="pt-overlay"></div>
+<div class="pt-bar" id="pt-bar"></div>
+<div class="cur" id="cur"></div><div class="cur-r" id="cur-r"></div>
+ 
+<div class="drawer" id="drawer">
+  <button class="drawer-x" id="drawer-x">✕</button>
+  <a href="index.html">Trang Chủ</a>
+  <a href="offers.html">Ưu Đãi</a>
+  <a href="about.html">About</a>
+  <a href="menu.html">Menu</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="contact.html">Liên Hệ</a>
+</div>
+ 
+<header class="nav" id="nav">
+  <a href="index.html" class="nav-logo">THE WANN</a>
+  <ul class="nav-links">
+    <li><a href="offers.html">Ưu đãi</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="menu.html" class="active">Menu</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="contact.html">Liên hệ</a></li>
+  </ul>
+  <a href="contact.html" class="nav-book">Đặt Bàn</a>
+  <div class="ham" id="ham" onclick="tD()"><span></span><span></span><span></span></div>
+</header>
+ 
+<div class="page-hero">
+  <div class="ph-bg"></div>
+  <div class="ph-label">Food & Drink</div>
+  <div class="ph-title">VIP <span>Combos</span></div>
+  <p class="ph-sub">Gói combo VIP được thiết kế cho từng nhóm. Từ nhóm nhỏ đến tiệc lớn — đều có combo phù hợp.</p>
+</div>
+ 
+<div class="page-content">
+  <!-- VIP COMBOS -->
+  <div class="msec rv">
+    <div class="slabel">Combo Packages</div>
+    <div class="stitle">VIP <span class="a">Combo Menu</span></div>
+    <div class="mlist">
+      <div class="mrow">
+        <div>
+          <div class="mname">The Wann Food Set</div>
+          <div class="msub">6–8 khách · Ăn uống trọn gói · Gọi thêm theo yêu cầu</div>
+        </div>
+        <div class="mright"><span class="mbadge">Phổ biến</span><div class="mprice">3.799.000đ</div></div>
+      </div>
+      <div class="mrow">
+        <div>
+          <div class="mname">Combo Phantom</div>
+          <div class="msub">24 Heineken lạnh + Món ăn đặc trưng · 8–10 khách</div>
+        </div>
+        <div class="mright"><div class="mprice">6.999.000đ</div></div>
+      </div>
+      <div class="mrow">
+        <div>
+          <div class="mname">Combo Saturn</div>
+          <div class="msub">2 Gold Label + Full Food Premium · 10–12 khách</div>
+        </div>
+        <div class="mright"><div class="mprice">8.299.000đ</div></div>
+      </div>
+      <div class="mrow">
+        <div>
+          <div class="mname">Combo Universe</div>
+          <div class="msub">2 Belaire Rosé + Hải sản cao cấp · VIP Package</div>
+        </div>
+        <div class="mright"><span class="mbadge">VIP</span><div class="mprice">9.599.000đ</div></div>
+      </div>
+      <div class="mrow">
+        <div>
+          <div class="mname">Combo Jupiter</div>
+          <div class="msub">2 Hennessy VSOP + Premium Banquet · 12–15 khách</div>
+        </div>
+        <div class="mright"><div class="mprice">10.399.000đ</div></div>
+      </div>
+      <div class="mrow">
+        <div>
+          <div class="mname">Combo Mercury</div>
+          <div class="msub">2 Dom Pérignon + Full VIP Experience · 15–20 khách</div>
+        </div>
+        <div class="mright"><span class="mbadge gold">Ultimate</span><div class="mprice">24.319.000đ</div></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- DRINKS -->
+  <div class="msec rv">
+    <div class="slabel">Bar Program</div>
+    <div class="stitle">Đồ Uống <span class="a">Signature</span></div>
+    <div class="mlist">
+      <div class="mrow">
+        <div><div class="mname">Heineken Draft</div><div class="msub">Bia tươi phục vụ tại bàn</div></div>
+        <div class="mright"><div class="mprice">Theo Combo</div></div>
+      </div>
+      <div class="mrow">
+        <div><div class="mname">Craft Cocktails</div><div class="msub">30+ loại theo mùa · Bartender pha riêng theo yêu cầu</div></div>
+        <div class="mright"><div class="mprice">Liên hệ báo giá</div></div>
+      </div>
+      <div class="mrow">
+        <div><div class="mname">Premium Spirits</div><div class="msub">Hennessy · Belaire · Dom Pérignon · Gold Label</div></div>
+        <div class="mright"><div class="mprice">Theo Combo VIP</div></div>
+      </div>
+      <div class="mrow">
+        <div><div class="mname">Wine Selection</div><div class="msub">Đỏ · Trắng · Rosé · Champagne</div></div>
+        <div class="mright"><div class="mprice">Liên hệ báo giá</div></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- FOOD -->
+  <div class="msec rv">
+    <div class="slabel">Kitchen</div>
+    <div class="stitle">Ẩm Thực <span class="a">Signature</span></div>
+    <div class="mlist">
+      <div class="mrow">
+        <div><div class="mname">Wagyu Signature</div><div class="msub">Bò Wagyu từ bếp trưởng · Đặc sản hàng đầu</div></div>
+        <div class="mright"><span class="mbadge gold">Chef's Pick</span><div class="mprice">Trong Combo</div></div>
+      </div>
+      <div class="mrow">
+        <div><div class="mname">Hải Sản Cao Cấp</div><div class="msub">Tôm hùm · Cua · Sò điệp tươi theo ngày</div></div>
+        <div class="mright"><div class="mprice">Trong Combo VIP</div></div>
+      </div>
+      <div class="mrow">
+        <div><div class="mname">Gà Giòn Signature</div><div class="msub">Công thức độc quyền · Kèm sốt đặc biệt</div></div>
+        <div class="mright"><div class="mprice">Trong Combo</div></div>
+      </div>
+      <div class="mrow">
+        <div><div class="mname">50+ Món Đa Dạng</div><div class="msub">Appetizer · Main · Sharing plates · Dessert</div></div>
+        <div class="mright"><div class="mprice">Theo Gọi Món</div></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- CTA -->
+  <div class="cta-band rv">
+    <div class="cta-t">Nhận Báo Giá<br><span>Chi Tiết</span></div>
+    <p class="cta-s">Inbox để tư vấn combo phù hợp với nhóm — phản hồi nhanh trong vòng 30 phút</p>
+    <div class="cta-btns">
+      <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="btn-g">📘 Inbox Nhận Báo Giá</a>
+      <a href="tel:0902734576" class="btn-o">📞 0902 734 576</a>
+    </div>
+  </div>
+</div>
+ 
+<footer>
+  <div class="ftop">
+    <div><div class="flogo">THE WANN</div><div class="fmotto">"Where the night truly begins"</div></div>
+    <div class="fsocs">
+      <a href="tel:0902734576" class="fsoc">📞</a>
+      <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="fsoc">📘</a>
+      <a href="https://zalo.me/0902734576" target="_blank" class="fsoc">💬</a>
+    </div>
+  </div>
+  <div class="fbot">
+    <span>© 2026 THE WANN Nightclub & Bar · 51 Bùi Thị Xuân, Q.1, TP.HCM</span>
+    <span>Food · Drink · Music</span>
+  </div>
+</footer>
+<div class="fbar"><div class="fbar-in">
+  <div class="fbar-txt"><div class="fbar-t">🌟 THÁNG 3 RỰC RỠ — COMBO 800K MIỄN PHÍ</div><div class="fbar-s">Giảm thêm 10% bill · Còn hiệu lực cả tháng 3</div></div>
+  <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="fbar-btn">📘 Đặt Bàn</a>
+  <a href="tel:0902734576" class="fbar-tel">📞 Gọi</a>
+</div></div>
+ 
+<script>
+const overlay=document.getElementById('pt-overlay'),bar=document.getElementById('pt-bar');
+function navigateTo(url){bar.classList.add('loading');overlay.classList.add('fade-in');setTimeout(()=>bar.classList.add('done'),200);setTimeout(()=>window.location.href=url,400)}
+document.querySelectorAll('a[href]').forEach(a=>{const h=a.getAttribute('href');if(h&&!h.startsWith('http')&&!h.startsWith('tel:')&&!h.startsWith('#')&&h.endsWith('.html')){a.addEventListener('click',e=>{e.preventDefault();navigateTo(h)})}});
+window.addEventListener('pageshow',()=>{overlay.classList.remove('fade-in');bar.classList.remove('loading','done')});
+const isMobile=window.innerWidth<=768;
+if(!isMobile){const C=document.getElementById('cur'),R=document.getElementById('cur-r');let mx=0,my=0,rx=0,ry=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;if(C){C.style.left=mx+'px';C.style.top=my+'px'}if(R){R.style.left=rx+'px';R.style.top=ry+'px'}requestAnimationFrame(loop)})()}
+const nav=document.getElementById('nav');window.addEventListener('scroll',()=>nav.classList.toggle('s',window.scrollY>60));
+function tD(){document.getElementById('drawer').classList.toggle('o');document.getElementById('ham').classList.toggle('o')}
+function cD(){document.getElementById('drawer').classList.remove('o');document.getElementById('ham').classList.remove('o')}
+document.getElementById('drawer-x').addEventListener('click',cD);
+const ro=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('on'),i*70)})},{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
+</script>
+</body>
+</html>
+ 
