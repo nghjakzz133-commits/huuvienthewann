@@ -898,27 +898,7 @@ document.querySelectorAll('img:not([data-src])').forEach(img=>{
 
 // ================================
 // SMOOTH SCROLL (safe version)
-// ================================
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
 
-  const id=a.getAttribute('href');
-
-  if(id.length>1){
-
-    const target=document.querySelector(id);
-
-    if(target){
-
-      a.addEventListener('click',e=>{
-
-        e.preventDefault();
-
-        window.scrollTo({
-          top:target.getBoundingClientRect().top + window.scrollY - 76,
-          behavior:'smooth'
-        });
-
-      });
 
     }
 
