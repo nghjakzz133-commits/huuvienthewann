@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery — THE WANN Nightclub & Bar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Outfit',sans-serif;background:#080706;color:#EDE8DC;overflow-x:hidden;cursor:none}
+ 
+.pt-overlay{position:fixed;inset:0;z-index:9000;background:#080706;pointer-events:none;opacity:0;transition:opacity .35s ease}
+.pt-overlay.fade-in{opacity:1;pointer-events:all}
+.pt-bar{position:fixed;top:0;left:0;right:0;height:2px;z-index:9001;background:#D4AF6A;transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+.pt-bar.loading{transform:scaleX(.7)}.pt-bar.done{transform:scaleX(1)}
+ 
+.cur{position:fixed;width:10px;height:10px;background:#D4AF6A;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+.cur-r{position:fixed;width:36px;height:36px;border:1.5px solid rgba(212,175,106,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .12s ease}
+@media(hover:none){.cur,.cur-r{display:none}body{cursor:auto}}
+ 
+/* NAV */
+.nav{position:fixed;inset:0 0 auto;z-index:200;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;transition:all .4s;border-bottom:1px solid transparent}
+.nav.s{background:rgba(8,7,6,.97);backdrop-filter:blur(20px);padding:13px 48px;border-color:rgba(212,175,106,.1)}
+.nav-logo{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:5px;color:#D4AF6A;text-decoration:none}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(237,232,220,.5);text-decoration:none;transition:color .25s;position:relative}
+.nav-links a:hover{color:#D4AF6A}.nav-links a.active{color:#D4AF6A}
+.nav-links a.active::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:#D4AF6A}
+.nav-book{font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;background:#D4AF6A;color:#080706;padding:10px 22px;text-decoration:none;transition:background .25s}
+.nav-book:hover{background:#F0D08A}
+.ham{display:none;flex-direction:column;gap:5px;cursor:none;padding:4px}
+.ham span{display:block;width:22px;height:2px;background:#D4AF6A;border-radius:1px;transition:all .3s}
+.ham.o span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.ham.o span:nth-child(2){opacity:0}
+.ham.o span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.drawer{position:fixed;inset:0;z-index:199;background:#080706;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transform:translateX(100%);transition:transform .45s cubic-bezier(.77,0,.18,1)}
+.drawer.o{transform:translateX(0)}.drawer a{font-family:'Bebas Neue',cursive;font-size:44px;letter-spacing:4px;color:#EDE8DC;text-decoration:none}
+.drawer a:hover{color:#D4AF6A}.drawer-x{position:absolute;top:20px;right:36px;background:none;border:none;color:#D4AF6A;font-size:26px;cursor:none}
+ 
+/* PAGE HERO */
+.page-hero{padding:140px 48px 70px;position:relative;overflow:hidden;border-bottom:1px solid rgba(212,175,106,.08)}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(212,175,106,.04),transparent)}
+.ph-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#D4AF6A;margin-bottom:16px;display:flex;align-items:center;gap:12px;opacity:0;animation:up .6s .2s forwards}
+.ph-label::before{content:'';width:24px;height:1px;background:#D4AF6A}
+.ph-title{font-family:'Bebas Neue',cursive;font-size:clamp(60px,12vw,130px);letter-spacing:4px;color:#EDE8DC;line-height:.88;opacity:0;animation:up .8s .35s forwards}
+.ph-title span{-webkit-text-stroke:1.5px #D4AF6A;color:transparent}
+.ph-sub{font-size:17px;font-weight:300;color:rgba(237,232,220,.5);margin-top:18px;max-width:520px;opacity:0;animation:up .7s .55s forwards}
+.ph-bg{position:absolute;top:0;right:0;bottom:0;width:45%;background-image:url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200&q=80');background-size:cover;background-position:center;opacity:.07}
+ 
+/* SECTION LABELS */
+.sec-wrap{padding:80px 48px 0;max-width:1400px;margin:0 auto}
+.sec-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#D4AF6A;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.sec-label::before{content:'';width:24px;height:1px;background:#D4AF6A}
+.sec-title{font-family:'Bebas Neue',cursive;font-size:clamp(36px,6vw,60px);letter-spacing:3px;color:#EDE8DC;line-height:1}
+.sec-title .a{color:#D4AF6A}
+.sec-sub{font-size:15px;color:#6A5E50;margin-top:10px;max-width:500px}
+ 
+/* ═══════ REELS ═══════ */
+.reels-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:44px}
+ 
+.reel-card{position:relative;aspect-ratio:9/16;background:#141210;border:1px solid rgba(212,175,106,.08);overflow:hidden;cursor:none;transition:border-color .35s,transform .35s,box-shadow .35s}
+.reel-card:hover{border-color:rgba(212,175,106,.35);transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+ 
+.reel-thumb{position:absolute;inset:0;z-index:1}
+.reel-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s,opacity .4s;opacity:0}
+.reel-thumb img.ld{opacity:1}
+.reel-card:hover .reel-thumb img{transform:scale(1.05)}
+ 
+.reel-grad{position:absolute;inset:0;z-index:2;background:linear-gradient(to top,rgba(8,7,6,.96) 0%,rgba(8,7,6,.45) 45%,rgba(8,7,6,.1) 100%)}
+ 
+/* Play */
+.reel-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;width:68px;height:68px;border-radius:50%;background:rgba(212,175,106,.12);border:2px solid rgba(212,175,106,.4);display:flex;align-items:center;justify-content:center;transition:all .35s;backdrop-filter:blur(6px)}
+.reel-play svg{width:24px;height:24px;fill:#D4AF6A;margin-left:4px;transition:fill .25s}
+.reel-card:hover .reel-play{background:#D4AF6A;border-color:#D4AF6A;transform:translate(-50%,-50%) scale(1.12);box-shadow:0 0 30px rgba(212,175,106,.4)}
+.reel-card:hover .reel-play svg{fill:#080706}
+ 
+/* Pulse rings */
+.reel-rings{position:absolute;top:50%;left:50%;z-index:3;pointer-events:none}
+.reel-ring{position:absolute;width:68px;height:68px;border-radius:50%;border:1.5px solid rgba(212,175,106,.25);transform:translate(-50%,-50%);animation:ring-pulse 2.8s ease-out infinite}
+.reel-ring:nth-child(2){animation-delay:.9s}
+.reel-ring:nth-child(3){animation-delay:1.8s}
+@keyframes ring-pulse{0%{transform:translate(-50%,-50%) scale(1);opacity:.7}100%{transform:translate(-50%,-50%) scale(2.2);opacity:0}}
+ 
+/* YT badge */
+.reel-yt{position:absolute;top:14px;right:14px;z-index:5;background:rgba(0,0,0,.7);border:1px solid rgba(255,60,60,.3);padding:5px 10px;display:flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#ff5555;backdrop-filter:blur(4px)}
+.reel-yt::before{content:'';width:8px;height:8px;border-radius:50%;background:#ff4444;animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+ 
+/* Sound hint */
+.reel-sound-hint{position:absolute;top:14px;left:14px;z-index:5;display:flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(212,175,106,.5);opacity:0;transition:opacity .3s}
+.reel-card:hover .reel-sound-hint{opacity:1}
+ 
+/* Info */
+.reel-info{position:absolute;bottom:0;left:0;right:0;z-index:4;padding:22px 18px 20px}
+.reel-num{font-family:'Bebas Neue',cursive;font-size:52px;color:rgba(212,175,106,.06);line-height:1;margin-bottom:4px}
+.reel-title{font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:2px;color:#EDE8DC;line-height:1.1;margin-bottom:5px}
+.reel-meta{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(212,175,106,.45);margin-bottom:10px}
+.reel-cta{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(212,175,106,.6);border-bottom:1px solid rgba(212,175,106,.2);padding-bottom:2px;transition:all .25s;opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}
+.reel-card:hover .reel-cta{opacity:1;transform:translateY(0)}
+ 
+/* ═══════ VIDEO MODAL ═══════ */
+.vid-modal{position:fixed;inset:0;z-index:8000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.vid-modal.on{opacity:1;pointer-events:all}
+.vid-bg{position:absolute;inset:0;background:rgba(4,3,2,.97);cursor:none}
+ 
+.vid-wrap{position:relative;z-index:1;display:flex;align-items:center;gap:28px}
+ 
+/* 9:16 iframe */
+.vid-frame{position:relative;width:clamp(260px,28vw,360px);aspect-ratio:9/16;background:#000;box-shadow:0 0 80px rgba(0,0,0,.9),0 0 0 1px rgba(212,175,106,.12);flex-shrink:0}
+.vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+ 
+/* Side */
+.vid-panel{width:240px;display:flex;flex-direction:column;gap:18px}
+.vid-panel-num{font-family:'Bebas Neue',cursive;font-size:72px;color:rgba(212,175,106,.06);line-height:1}
+.vid-panel-title{font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:3px;color:#EDE8DC;line-height:1.05;margin-top:-16px}
+.vid-panel-meta{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(212,175,106,.45)}
+.vid-panel-desc{font-size:14px;color:#6A5E50;line-height:1.75;border-left:2px solid rgba(212,175,106,.15);padding-left:14px}
+.vid-panel-sound{display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(212,175,106,.35)}
+.vid-panel-sound::before{content:'';width:8px;height:8px;border-radius:50%;background:rgba(212,175,106,.35)}
+.vid-navs{display:flex;gap:6px}
+.vid-nav-btn{width:44px;height:44px;border:1px solid rgba(212,175,106,.18);background:transparent;color:rgba(212,175,106,.6);font-size:20px;cursor:none;display:flex;align-items:center;justify-content:center;transition:all .25s}
+.vid-nav-btn:hover{background:rgba(212,175,106,.1);border-color:rgba(212,175,106,.5);color:#D4AF6A}
+.vid-yt-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(255,0,0,.1);border:1px solid rgba(255,60,60,.25);color:#ff6666;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all .25s}
+.vid-yt-btn:hover{background:rgba(255,0,0,.2);border-color:rgba(255,60,60,.5)}
+ 
+.vid-close{position:fixed;top:22px;right:28px;z-index:8001;width:44px;height:44px;background:rgba(212,175,106,.08);border:1px solid rgba(212,175,106,.18);color:#D4AF6A;font-size:18px;cursor:none;display:flex;align-items:center;justify-content:center;transition:all .25s}
+.vid-close:hover{background:rgba(212,175,106,.18);border-color:#D4AF6A}
+.vid-counter{position:fixed;top:28px;left:50%;transform:translateX(-50%);z-index:8001;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(212,175,106,.4)}
+ 
+/* ═══════ PHOTOS ═══════ */
+.photos-wrap{padding:90px 48px 0;max-width:1400px;margin:0 auto}
+ 
+.filter-bar{display:flex;gap:0;margin-top:36px;overflow-x:auto;scrollbar-width:none}
+.filter-bar::-webkit-scrollbar{display:none}
+.filter-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(237,232,220,.3);padding:10px 18px;border:1px solid rgba(212,175,106,.07);background:transparent;cursor:none;transition:all .25s;white-space:nowrap}
+.filter-btn+.filter-btn{margin-left:-1px}
+.filter-btn:hover{color:rgba(237,232,220,.6);border-color:rgba(212,175,106,.2)}
+.filter-btn.on{color:#D4AF6A;border-color:rgba(212,175,106,.4);background:rgba(212,175,106,.07);position:relative;z-index:1}
+.f-count{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;background:rgba(212,175,106,.12);border-radius:50%;font-size:8px;margin-left:5px;vertical-align:middle}
+ 
+.photo-grid{margin-top:28px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.gi{overflow:hidden;background:#141210;position:relative;cursor:none;border:1px solid rgba(212,175,106,.04)}
+.gi img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s,opacity .5s;opacity:0}
+.gi img.ld{opacity:1}
+.gi:hover img{transform:scale(1.07)}
+.gi.featured{grid-column:span 2;grid-row:span 2}
+.gi.wide{grid-column:span 2}
+.gi:not(.featured):not(.wide){min-height:220px}
+.gi.featured{min-height:448px}
+.gi.wide:not(.featured){min-height:220px}
+.gio{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,7,6,.93) 0%,rgba(8,7,6,.3) 50%,transparent 100%);opacity:0;transition:opacity .3s;display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+.gi:hover .gio{opacity:1}
+.gio-ico{font-size:22px;margin-bottom:6px}
+.gio-t{font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:#EDE8DC;line-height:1;margin-bottom:3px}
+.gio-c{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(212,175,106,.6)}
+.gi-tag{position:absolute;top:10px;left:10px;z-index:2;padding:3px 9px;background:rgba(8,7,6,.65);border:1px solid rgba(212,175,106,.13);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(212,175,106,.55);backdrop-filter:blur(3px);transition:opacity .3s}
+.gi:hover .gi-tag{opacity:0}
+.gi.hidden{display:none}
+ 
+/* PHOTO LIGHTBOX */
+.lb{position:fixed;inset:0;z-index:7000;background:rgba(4,3,2,.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.lb.on{opacity:1;pointer-events:all}
+.lb img{max-width:85vw;max-height:85vh;object-fit:contain;box-shadow:0 0 60px rgba(0,0,0,.8)}
+.lb-cap{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(212,175,106,.45)}
+.lb-close{position:fixed;top:22px;right:28px;background:rgba(212,175,106,.08);border:1px solid rgba(212,175,106,.18);color:#D4AF6A;font-size:18px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:none;transition:all .25s}
+.lb-close:hover{background:rgba(212,175,106,.18);border-color:#D4AF6A}
+.lb-prev,.lb-next{position:fixed;top:50%;transform:translateY(-50%);background:rgba(212,175,106,.06);border:1px solid rgba(212,175,106,.13);color:rgba(212,175,106,.5);font-size:22px;width:48px;height:56px;display:flex;align-items:center;justify-content:center;cursor:none;transition:all .25s}
+.lb-prev{left:18px}.lb-next{right:18px}
+.lb-prev:hover,.lb-next:hover{background:rgba(212,175,106,.14);color:#D4AF6A;border-color:rgba(212,175,106,.4)}
+ 
+/* LOAD MORE */
+.load-more-wrap{padding:44px 48px;text-align:center;max-width:1400px;margin:0 auto}
+.btn-more{display:inline-flex;align-items:center;gap:10px;padding:14px 36px;border:1px solid rgba(212,175,106,.2);background:transparent;color:rgba(212,175,220,.45);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:none;transition:all .3s;text-decoration:none}
+.btn-more:hover{border-color:rgba(212,175,106,.5);color:#D4AF6A;background:rgba(212,175,106,.05)}
+ 
+/* FOOTER */
+footer{background:#080706;border-top:1px solid rgba(212,175,106,.08);padding:52px 48px 110px;margin-top:60px}
+.ftop{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;flex-wrap:wrap;gap:20px}
+.flogo{font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:6px;color:#D4AF6A}
+.fmotto{font-size:14px;color:#6A5E50;font-style:italic;margin-top:4px}
+.fsocs{display:flex;gap:10px}
+.fsoc{width:42px;height:42px;border:1px solid rgba(212,175,106,.15);display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;color:#6A5E50;transition:all .25s}
+.fsoc:hover{border-color:#D4AF6A;color:#D4AF6A;background:rgba(212,175,106,.06)}
+.fbot{max-width:1280px;margin:0 auto;border-top:1px solid rgba(212,175,106,.06);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:'DM Mono',monospace;font-size:11px;color:#6A5E50;letter-spacing:1px}
+ 
+.fbar{position:fixed;bottom:0;left:0;right:0;z-index:198;background:rgba(8,7,6,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(212,175,106,.13);padding:13px 48px}
+.fbar-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.fbar-txt{flex:1;min-width:0}
+.fbar-t{font-family:'Bebas Neue',cursive;font-size:15px;letter-spacing:3px;color:#D4AF6A}
+.fbar-s{font-family:'DM Mono',monospace;font-size:10px;color:#6A5E50;letter-spacing:1px;margin-top:2px}
+.fbar-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:#D4AF6A;color:#080706;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:background .25s}
+.fbar-btn:hover{background:#F0D08A}
+.fbar-tel{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border:1px solid rgba(212,175,106,.25);color:#D4AF6A;font-family:'DM Mono',monospace;font-size:11px;text-decoration:none;white-space:nowrap;transition:all .25s}
+.fbar-tel:hover{border-color:#D4AF6A;background:rgba(212,175,106,.06)}
+ 
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}.rv.on{opacity:1;transform:translateY(0)}
+ 
+@media(max-width:1100px){
+  .reels-grid{grid-template-columns:repeat(2,1fr)}
+  .vid-panel{display:none}
+  .vid-frame{width:clamp(260px,60vw,360px)}
+}
+@media(max-width:960px){
+  .nav{padding:14px 24px}.nav.s{padding:12px 24px}.nav-links,.nav-book{display:none}.ham{display:flex}
+  .page-hero{padding:110px 24px 50px}
+  .sec-wrap,.photos-wrap{padding-left:24px;padding-right:24px}
+  .load-more-wrap{padding:40px 24px}
+  .photo-grid{grid-template-columns:repeat(2,1fr)}
+  .gi.featured{grid-column:span 2}
+  footer{padding:44px 24px 110px}.ftop{flex-direction:column;align-items:flex-start}.fbot{flex-direction:column}
+  .fbar{padding:12px 20px}.fbar-txt{display:none}
+}
+@media(max-width:580px){
+  .reels-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .photo-grid{grid-template-columns:repeat(2,1fr)}
+  .gi:not(.featured){min-height:160px}
+  .gi.featured{min-height:320px}
+}
+</style>
+</head>
+<body>
+ 
+<div class="pt-overlay" id="pt-overlay"></div>
+<div class="pt-bar" id="pt-bar"></div>
+<div class="cur" id="cur"></div>
+<div class="cur-r" id="cur-r"></div>
+ 
+<!-- VIDEO MODAL -->
+<div class="vid-modal" id="vidModal">
+  <div class="vid-bg" id="vidBg"></div>
+  <button class="vid-close" id="vidClose">✕</button>
+  <div class="vid-counter" id="vidCounter">01 / 04</div>
+  <div class="vid-wrap">
+    <div class="vid-frame">
+      <iframe id="vidIframe" src="" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div class="vid-panel" id="vidPanel">
+      <div class="vid-panel-num" id="vidPanelNum">01</div>
+      <div class="vid-panel-title" id="vidPanelTitle">—</div>
+      <div class="vid-panel-meta" id="vidPanelMeta">THE WANN · YOUTUBE SHORTS</div>
+      <div class="vid-panel-desc" id="vidPanelDesc">—</div>
+      <div class="vid-panel-sound">Bật âm thanh để trải nghiệm đầy đủ</div>
+      <div class="vid-navs">
+        <button class="vid-nav-btn" id="vidPrev">‹</button>
+        <button class="vid-nav-btn" id="vidNext">›</button>
+      </div>
+      <a id="vidYtBtn" href="#" target="_blank" class="vid-yt-btn">▶ Xem trên YouTube</a>
+    </div>
+  </div>
+</div>
+ 
+<!-- PHOTO LIGHTBOX -->
+<div class="lb" id="lb">
+  <button class="lb-close" id="lbClose">✕</button>
+  <button class="lb-prev" id="lbPrev">‹</button>
+  <img id="lbImg" src="" alt="">
+  <div class="lb-cap" id="lbCap"></div>
+  <button class="lb-next" id="lbNext">›</button>
+</div>
+ 
+<!-- DRAWER -->
+<div class="drawer" id="drawer">
+  <button class="drawer-x" id="drawer-x">✕</button>
+  <a href="index.html">Trang Chủ</a>
+  <a href="offers.html">Ưu Đãi</a>
+  <a href="about.html">About</a>
+  <a href="menu.html">Menu</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="contact.html">Liên Hệ</a>
+</div>
+ 
+<!-- NAV -->
+<header class="nav" id="nav">
+  <a href="index.html" class="nav-logo">THE WANN</a>
+  <ul class="nav-links">
+    <li><a href="offers.html">Ưu đãi</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="menu.html">Menu</a></li>
+    <li><a href="gallery.html" class="active">Gallery</a></li>
+    <li><a href="contact.html">Liên hệ</a></li>
+  </ul>
+  <a href="contact.html" class="nav-book">Đặt Bàn</a>
+  <div class="ham" id="ham" onclick="tD()"><span></span><span></span><span></span></div>
+</header>
+ 
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="ph-bg"></div>
+  <div class="ph-label">Media</div>
+  <div class="ph-title">Video &<br><span>Gallery</span></div>
+  <p class="ph-sub">Nhìn vào THE WANN — từ sàn nhảy đến bàn VIP. Click video để xem với âm thanh đầy đủ.</p>
+</div>
+ 
+<!-- ═══════════════ REELS ═══════════════ -->
+<div class="sec-wrap">
+  <div class="rv">
+    <div class="sec-label">YouTube Shorts</div>
+    <div class="sec-title">Reels <span class="a">Của Chúng Tôi</span></div>
+    <div class="sec-sub">Bấm vào từng video để xem fullscreen với âm thanh</div>
+  </div>
+ 
+  <div class="reels-grid rv">
+ 
+    <div class="reel-card" data-index="0">
+      <div class="reel-thumb">
+        <img src="https://i.ytimg.com/vi/LwYXam5YdpY/hqdefault.jpg" alt="THE WANN Vibe" onerror="this.src='https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&q=80'">
+      </div>
+      <div class="reel-grad"></div>
+      <div class="reel-rings"><div class="reel-ring"></div><div class="reel-ring"></div><div class="reel-ring"></div></div>
+      <div class="reel-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="reel-yt">Shorts</div>
+      <div class="reel-sound-hint">🔊 Có âm thanh</div>
+      <div class="reel-info">
+        <div class="reel-num">01</div>
+        <div class="reel-title">THE WANN Vibe</div>
+        <div class="reel-meta">Nightclub Energy</div>
+        <div class="reel-cta">▶ Xem ngay</div>
+      </div>
+    </div>
+ 
+    <div class="reel-card" data-index="1">
+      <div class="reel-thumb">
+        <img src="https://i.ytimg.com/vi/SlrxM_Jnwo8/hqdefault.jpg" alt="Party Night" onerror="this.src='https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&q=80'">
+      </div>
+      <div class="reel-grad"></div>
+      <div class="reel-rings"><div class="reel-ring"></div><div class="reel-ring"></div><div class="reel-ring"></div></div>
+      <div class="reel-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="reel-yt">Shorts</div>
+      <div class="reel-sound-hint">🔊 Có âm thanh</div>
+      <div class="reel-info">
+        <div class="reel-num">02</div>
+        <div class="reel-title">Party Night</div>
+        <div class="reel-meta">Saturday Special</div>
+        <div class="reel-cta">▶ Xem ngay</div>
+      </div>
+    </div>
+ 
+    <div class="reel-card" data-index="2">
+      <div class="reel-thumb">
+        <img src="https://i.ytimg.com/vi/shMfThEt-Fs/hqdefault.jpg" alt="DJ Live Music" onerror="this.src='https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&q=80'">
+      </div>
+      <div class="reel-grad"></div>
+      <div class="reel-rings"><div class="reel-ring"></div><div class="reel-ring"></div><div class="reel-ring"></div></div>
+      <div class="reel-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="reel-yt">Shorts</div>
+      <div class="reel-sound-hint">🔊 Có âm thanh</div>
+      <div class="reel-info">
+        <div class="reel-num">03</div>
+        <div class="reel-title">DJ & Live Music</div>
+        <div class="reel-meta">Music Experience</div>
+        <div class="reel-cta">▶ Xem ngay</div>
+      </div>
+    </div>
+ 
+    <div class="reel-card" data-index="3">
+      <div class="reel-thumb">
+        <img src="https://i.ytimg.com/vi/j6Bbt-EXllw/hqdefault.jpg" alt="VIP Experience" onerror="this.src='https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=600&q=80'">
+      </div>
+      <div class="reel-grad"></div>
+      <div class="reel-rings"><div class="reel-ring"></div><div class="reel-ring"></div><div class="reel-ring"></div></div>
+      <div class="reel-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="reel-yt">Shorts</div>
+      <div class="reel-sound-hint">🔊 Có âm thanh</div>
+      <div class="reel-info">
+        <div class="reel-num">04</div>
+        <div class="reel-title">VIP Experience</div>
+        <div class="reel-meta">Exclusive Service</div>
+        <div class="reel-cta">▶ Xem ngay</div>
+      </div>
+    </div>
+ 
+  </div>
+</div>
+ 
+<!-- ═══════════════ PHOTOS ═══════════════ -->
+<div class="photos-wrap">
+  <div class="rv">
+    <div class="sec-label">Photography</div>
+    <div class="sec-title">Hình Ảnh <span class="a">THE WANN</span></div>
+  </div>
+ 
+  <div class="filter-bar rv" id="filterBar">
+    <button class="filter-btn on" data-cat="all">Tất cả <span class="f-count">20</span></button>
+    <button class="filter-btn" data-cat="interior">Không gian <span class="f-count">5</span></button>
+    <button class="filter-btn" data-cat="vip">VIP Room <span class="f-count">2</span></button>
+    <button class="filter-btn" data-cat="party">Party Night <span class="f-count">4</span></button>
+    <button class="filter-btn" data-cat="drinks">Đồ uống <span class="f-count">3</span></button>
+    <button class="filter-btn" data-cat="food">Ẩm thực <span class="f-count">3</span></button>
+    <button class="filter-btn" data-cat="events">Sự kiện <span class="f-count">3</span></button>
+  </div>
+ 
+  <div class="photo-grid rv" id="photoGrid">
+    <div class="gi featured" data-category="interior" data-title="Main Dance Floor">
+      <img src="https://images.unsplash.com/photo-1770418762226-074fc636b0b9?q=80&w=1171&auto=format&fit=crop" alt="Main Dance Floor">
+      <div class="gi-tag">Không gian</div>
+      <div class="gio"><div class="gio-ico">🎵</div><div class="gio-t">Main Dance Floor</div><div class="gio-c">Không gian</div></div>
+    </div>
+    <div class="gi" data-category="interior" data-title="LED Lighting System">
+      <img src="https://images.unsplash.com/photo-1770418539112-de82a04fee9b?q=80&w=1170&auto=format&fit=crop" alt="LED Lighting">
+      <div class="gi-tag">Không gian</div>
+      <div class="gio"><div class="gio-ico">💡</div><div class="gio-t">LED Lighting System</div><div class="gio-c">Không gian</div></div>
+    </div>
+    <div class="gi" data-category="interior" data-title="Bar Counter">
+      <img src="https://images.unsplash.com/photo-1572116469696-31de0f17cc34?q=80&w=2067" alt="Bar Counter">
+      <div class="gi-tag">Không gian</div>
+      <div class="gio"><div class="gio-ico">🍸</div><div class="gio-t">Premium Bar Counter</div><div class="gio-c">Không gian</div></div>
+    </div>
+    <div class="gi" data-category="interior" data-title="DJ Booth">
+      <img src="https://images.unsplash.com/photo-1629372921450-d5e0accecb32?q=80&w=1170&auto=format&fit=crop" alt="DJ Booth">
+      <div class="gi-tag">Không gian</div>
+      <div class="gio"><div class="gio-ico">🎧</div><div class="gio-t">Professional DJ Booth</div><div class="gio-c">Không gian</div></div>
+    </div>
+    <div class="gi" data-category="vip" data-title="VIP Room Gold">
+      <img src="https://images.unsplash.com/photo-1770419232667-29621d4602aa?q=80&w=735&auto=format&fit=crop" alt="VIP Room">
+      <div class="gi-tag">VIP</div>
+      <div class="gio"><div class="gio-ico">👑</div><div class="gio-t">VIP Room Gold</div><div class="gio-c">VIP Room</div></div>
+    </div>
+    <div class="gi" data-category="vip" data-title="Private Lounge">
+      <img src="https://images.unsplash.com/photo-1770419772599-dcb7ee4d1d18?q=80&w=1172&auto=format&fit=crop" alt="Private Lounge">
+      <div class="gi-tag">VIP</div>
+      <div class="gio"><div class="gio-ico">🛋️</div><div class="gio-t">Private Lounge</div><div class="gio-c">VIP Room</div></div>
+    </div>
+    <div class="gi featured" data-category="party" data-title="Saturday Night Live">
+      <img src="https://images.unsplash.com/photo-1770419358247-e1ff799c3811?q=80&w=1170&auto=format&fit=crop" alt="Party Night">
+      <div class="gi-tag">Party</div>
+      <div class="gio"><div class="gio-ico">🎉</div><div class="gio-t">Saturday Night Live</div><div class="gio-c">Party Night</div></div>
+    </div>
+    <div class="gi" data-category="party" data-title="Crowd Energy">
+      <img src="https://images.unsplash.com/photo-1770419453586-01f27c318373?q=80&w=1170&auto=format&fit=crop" alt="Crowd">
+      <div class="gi-tag">Party</div>
+      <div class="gio"><div class="gio-ico">🔥</div><div class="gio-t">Crowd Energy</div><div class="gio-c">Party Night</div></div>
+    </div>
+    <div class="gi" data-category="party" data-title="DJ Performance">
+      <img src="https://images.unsplash.com/photo-1770418866984-dc13a1ae387a?q=80&w=1170&auto=format&fit=crop" alt="DJ Performance">
+      <div class="gi-tag">Party</div>
+      <div class="gio"><div class="gio-ico">🎤</div><div class="gio-t">DJ Performance</div><div class="gio-c">Party Night</div></div>
+    </div>
+    <div class="gi" data-category="drinks" data-title="Signature Cocktails">
+      <img src="https://images.unsplash.com/photo-1623408859815-22534357b3db?q=80&w=1172&auto=format&fit=crop" alt="Cocktails">
+      <div class="gi-tag">Đồ uống</div>
+      <div class="gio"><div class="gio-ico">🍹</div><div class="gio-t">Signature Cocktails</div><div class="gio-c">Đồ uống</div></div>
+    </div>
+    <div class="gi" data-category="drinks" data-title="Premium Champagne">
+      <img src="https://images.unsplash.com/photo-1672834039186-2cd588f5722e?q=80&w=687&auto=format&fit=crop" alt="Champagne">
+      <div class="gi-tag">Đồ uống</div>
+      <div class="gio"><div class="gio-ico">🍾</div><div class="gio-t">Premium Champagne</div><div class="gio-c">Đồ uống</div></div>
+    </div>
+    <div class="gi" data-category="drinks" data-title="Craft Beer">
+      <img src="https://images.unsplash.com/photo-1653387253215-bb98607b4c53?q=80&w=1170&auto=format&fit=crop" alt="Beer">
+      <div class="gi-tag">Đồ uống</div>
+      <div class="gio"><div class="gio-ico">🍺</div><div class="gio-t">Craft Beer Selection</div><div class="gio-c">Đồ uống</div></div>
+    </div>
+    <div class="gi" data-category="food" data-title="Fusion Cuisine">
+      <img src="https://images.unsplash.com/photo-1770421502088-c57787e079f4?q=80&w=1170&auto=format&fit=crop" alt="Food">
+      <div class="gi-tag">Ẩm thực</div>
+      <div class="gio"><div class="gio-ico">🍽️</div><div class="gio-t">Fusion Á-Âu</div><div class="gio-c">Ẩm thực</div></div>
+    </div>
+    <div class="gi" data-category="food" data-title="Premium Appetizers">
+      <img src="https://images.unsplash.com/photo-1762631934591-8a9bf09e5dfe?q=80&w=1170&auto=format&fit=crop" alt="Appetizers">
+      <div class="gi-tag">Ẩm thực</div>
+      <div class="gio"><div class="gio-ico">🥘</div><div class="gio-t">Premium Appetizers</div><div class="gio-c">Ẩm thực</div></div>
+    </div>
+    <div class="gi" data-category="food" data-title="Fresh Seafood">
+      <img src="https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?q=80&w=1074&auto=format&fit=crop" alt="Seafood">
+      <div class="gi-tag">Ẩm thực</div>
+      <div class="gio"><div class="gio-ico">🦞</div><div class="gio-t">Fresh Seafood</div><div class="gio-c">Ẩm thực</div></div>
+    </div>
+    <div class="gi featured" data-category="events" data-title="Birthday Party">
+      <img src="https://images.unsplash.com/photo-1770420186712-6fbb6d937348?q=80&w=1171&auto=format&fit=crop" alt="Birthday">
+      <div class="gi-tag">Sự kiện</div>
+      <div class="gio"><div class="gio-ico">🎂</div><div class="gio-t">Birthday Party</div><div class="gio-c">Sự kiện</div></div>
+    </div>
+    <div class="gi" data-category="events" data-title="Corporate Event">
+      <img src="https://images.unsplash.com/photo-1603985863797-97ded9ac5eda?q=80&w=1170&auto=format&fit=crop" alt="Corporate">
+      <div class="gi-tag">Sự kiện</div>
+      <div class="gio"><div class="gio-ico">💼</div><div class="gio-t">Corporate Event</div><div class="gio-c">Sự kiện</div></div>
+    </div>
+    <div class="gi" data-category="events" data-title="Live Music Night">
+      <img src="https://images.unsplash.com/photo-1770419590395-9b21383ff646?q=80&w=1170&auto=format&fit=crop" alt="Live Performance">
+      <div class="gi-tag">Sự kiện</div>
+      <div class="gio"><div class="gio-ico">🎸</div><div class="gio-t">Live Music Night</div><div class="gio-c">Sự kiện</div></div>
+    </div>
+    <div class="gi" data-category="party" data-title="New Year Countdown">
+      <img src="https://images.unsplash.com/photo-1768054486182-63ee9120d5a2?q=80&w=687&auto=format&fit=crop" alt="New Year">
+      <div class="gi-tag">Party</div>
+      <div class="gio"><div class="gio-ico">🎆</div><div class="gio-t">New Year Countdown</div><div class="gio-c">Party Night</div></div>
+    </div>
+    <div class="gi" data-category="interior" data-title="Red-Black Theme">
+      <img src="https://images.unsplash.com/photo-1541532713592-79a0317b6b77?q=80&w=800&auto=format&fit=crop" alt="Interior">
+      <div class="gi-tag">Không gian</div>
+      <div class="gio"><div class="gio-ico">🎨</div><div class="gio-t">Red-Black Theme</div><div class="gio-c">Không gian</div></div>
+    </div>
+  </div>
+</div>
+ 
+<div class="load-more-wrap">
+  <a href="https://drive.google.com/drive/folders/1WmyLIrhcyo4smtURbE5RlM6TuHA-IQB2" target="_blank" class="btn-more">
+    Xem thêm hình ảnh trên Google Drive →
+  </a>
+</div>
+ 
+<footer>
+  <div class="ftop">
+    <div><div class="flogo">THE WANN</div><div class="fmotto">"Where the night truly begins"</div></div>
+    <div class="fsocs">
+      <a href="tel:0902734576" class="fsoc">📞</a>
+      <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="fsoc">📘</a>
+      <a href="https://zalo.me/0902734576" target="_blank" class="fsoc">💬</a>
+    </div>
+  </div>
+  <div class="fbot">
+    <span>© 2026 THE WANN Nightclub & Bar · 51 Bùi Thị Xuân, Q.1, TP.HCM</span>
+    <span>Food · Drink · Music</span>
+  </div>
+</footer>
+<div class="fbar"><div class="fbar-in">
+  <div class="fbar-txt"><div class="fbar-t">🌟 THÁNG 3 RỰC RỠ — COMBO 800K MIỄN PHÍ</div><div class="fbar-s">Giảm thêm 10% bill · Còn hiệu lực cả tháng 3</div></div>
+  <a href="https://www.facebook.com/huu.vien.335743" target="_blank" class="fbar-btn">📘 Đặt Bàn</a>
+  <a href="tel:0902734576" class="fbar-tel">📞 Gọi</a>
+</div></div>
+ 
+<script>
+// PAGE TRANSITION
+const overlay=document.getElementById('pt-overlay'),ptBar=document.getElementById('pt-bar');
+function navigateTo(url){ptBar.classList.add('loading');overlay.classList.add('fade-in');setTimeout(()=>ptBar.classList.add('done'),200);setTimeout(()=>window.location.href=url,400)}
+document.querySelectorAll('a[href]').forEach(a=>{
+  const h=a.getAttribute('href');
+  if(h&&!h.startsWith('http')&&!h.startsWith('tel:')&&!h.startsWith('#')&&h.endsWith('.html')){
+    a.addEventListener('click',e=>{e.preventDefault();navigateTo(h)});
+  }
+});
+window.addEventListener('pageshow',()=>{overlay.classList.remove('fade-in');ptBar.classList.remove('loading','done')});
+ 
+// CURSOR
+const isMob=window.innerWidth<=768;
+if(!isMob){
+  const C=document.getElementById('cur'),R=document.getElementById('cur-r');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;if(C){C.style.left=mx+'px';C.style.top=my+'px'}if(R){R.style.left=rx+'px';R.style.top=ry+'px'}requestAnimationFrame(loop)})();
+  document.querySelectorAll('a,button,.reel-card,.gi').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{if(C){C.style.width='16px';C.style.height='16px'}if(R){R.style.width='50px';R.style.height='50px'}});
+    el.addEventListener('mouseleave',()=>{if(C){C.style.width='10px';C.style.height='10px'}if(R){R.style.width='36px';R.style.height='36px'}});
+  });
+}
+ 
+// NAV
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('s',window.scrollY>60));
+function tD(){document.getElementById('drawer').classList.toggle('o');document.getElementById('ham').classList.toggle('o')}
+function cD(){document.getElementById('drawer').classList.remove('o');document.getElementById('ham').classList.remove('o')}
+document.getElementById('drawer-x').addEventListener('click',cD);
+ 
+// ═══ VIDEO MODAL ═══
+const reels=[
+  {id:'LwYXam5YdpY',title:'THE WANN Vibe',meta:'NIGHTCLUB ENERGY · THE WANN',desc:'Không khí đêm tại THE WANN — sàn nhảy, ánh đèn và năng lượng đám đông không thể sao chép.'},
+  {id:'SlrxM_Jnwo8',title:'Party Night',meta:'SATURDAY SPECIAL · THE WANN',desc:'Đêm thứ 7 tại THE WANN — DJ set liên tục và crowd energy không dừng lại cho đến sáng.'},
+  {id:'shMfThEt-Fs',title:'DJ & Live Music',meta:'MUSIC EXPERIENCE · THE WANN',desc:'DJ set kết hợp ban nhạc live — không đêm nào giống đêm nào. Nghe để cảm nhận.'},
+  {id:'j6Bbt-EXllw',title:'VIP Experience',meta:'EXCLUSIVE SERVICE · THE WANN',desc:'Trải nghiệm bàn VIP — không gian riêng tư, dịch vụ cá nhân hóa, đặc quyền đêm nay.'}
+];
+let curVid=0;
+const vidModal=document.getElementById('vidModal');
+const vidIframe=document.getElementById('vidIframe');
+const vidClose=document.getElementById('vidClose');
+const vidBg=document.getElementById('vidBg');
+const vidCounter=document.getElementById('vidCounter');
+const vidPanelNum=document.getElementById('vidPanelNum');
+const vidPanelTitle=document.getElementById('vidPanelTitle');
+const vidPanelMeta=document.getElementById('vidPanelMeta');
+const vidPanelDesc=document.getElementById('vidPanelDesc');
+const vidYtBtn=document.getElementById('vidYtBtn');
+const vidPrev=document.getElementById('vidPrev');
+const vidNext=document.getElementById('vidNext');
+ 
+function openVid(i){
+  curVid=i;
+  const d=reels[i];
+  // autoplay=1, mute=0 → user can hear audio; YouTube Shorts embed
+  vidIframe.src=`https://www.youtube.com/embed/${d.id}?autoplay=1&rel=0&playsinline=1`;
+  vidCounter.textContent=String(i+1).padStart(2,'0')+' / '+String(reels.length).padStart(2,'0');
+  vidPanelNum.textContent=String(i+1).padStart(2,'0');
+  vidPanelTitle.textContent=d.title;
+  vidPanelMeta.textContent=d.meta;
+  vidPanelDesc.textContent=d.desc;
+  vidYtBtn.href=`https://www.youtube.com/shorts/${d.id}`;
+  vidModal.classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function closeVid(){
+  vidIframe.src='';
+  vidModal.classList.remove('on');
+  document.body.style.overflow='';
+}
+vidClose.addEventListener('click',closeVid);
+vidBg.addEventListener('click',closeVid);
+vidPrev.addEventListener('click',()=>openVid((curVid-1+reels.length)%reels.length));
+vidNext.addEventListener('click',()=>openVid((curVid+1)%reels.length));
+document.querySelectorAll('.reel-card').forEach(card=>{
+  card.addEventListener('click',()=>openVid(parseInt(card.dataset.index)));
+});
+document.addEventListener('keydown',e=>{
+  if(!vidModal.classList.contains('on'))return;
+  if(e.key==='Escape')closeVid();
+  if(e.key==='ArrowLeft')vidPrev.click();
+  if(e.key==='ArrowRight')vidNext.click();
+});
+ 
+// ═══ PHOTO FILTER ═══
+const filterBtns=document.querySelectorAll('.filter-btn');
+const photoItems=document.querySelectorAll('#photoGrid .gi');
+filterBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    filterBtns.forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    const cat=btn.dataset.cat;
+    photoItems.forEach(item=>{
+      const show=cat==='all'||item.dataset.category===cat;
+      item.classList.toggle('hidden',!show);
+    });
+  });
+});
+ 
+// ═══ PHOTO LIGHTBOX ═══
+const lb=document.getElementById('lb');
+const lbImg=document.getElementById('lbImg');
+const lbCap=document.getElementById('lbCap');
+let lbIdx=0;
+function getVis(){return Array.from(photoItems).filter(el=>!el.classList.contains('hidden'))}
+function openLb(i){
+  lbIdx=i;
+  const vis=getVis();
+  lbImg.src=vis[i].querySelector('img').src;
+  lbCap.textContent=vis[i].dataset.title||'';
+  lb.classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function closeLb(){lb.classList.remove('on');document.body.style.overflow=''}
+function lbNav(d){const vis=getVis();lbIdx=(lbIdx+d+vis.length)%vis.length;openLb(lbIdx)}
+document.getElementById('lbClose').addEventListener('click',closeLb);
+document.getElementById('lbPrev').addEventListener('click',()=>lbNav(-1));
+document.getElementById('lbNext').addEventListener('click',()=>lbNav(1));
+lb.addEventListener('click',e=>{if(e.target===lb||e.target===lbImg)closeLb()});
+photoItems.forEach(item=>{
+  item.addEventListener('click',()=>{
+    const vis=getVis();
+    const i=vis.indexOf(item);
+    if(i>=0)openLb(i);
+  });
+});
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('on'))return;
+  if(e.key==='Escape')closeLb();
+  if(e.key==='ArrowLeft')lbNav(-1);
+  if(e.key==='ArrowRight')lbNav(1);
+});
+ 
+// ═══ REVEAL + LAZY ═══
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('on'),i*60)});
+},{threshold:.07});
+document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const img=e.target;
+      if(!img.classList.contains('ld')){img.classList.add('ld')}
+      io.unobserve(img);
+    }
+  });
+});
+document.querySelectorAll('.gi img,.reel-thumb img').forEach(img=>io.observe(img));
+</script>
+</body>
+</html>
+ 
