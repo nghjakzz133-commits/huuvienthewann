@@ -481,21 +481,73 @@
   text-decoration:underline;
   color:#e6c27a;
 }
+  .menu-toggle{
+  width:30px;
+  height:22px;
+  display:none;
+  flex-direction:column;
+  justify-content:space-between;
+  cursor:pointer;
+}
+
+.menu-toggle span{
+  display:block;
+  height:3px;
+  background:#c9a96a;
+  border-radius:2px;
+}
+
+/* Mobile */
+@media (max-width:768px){
+
+  nav{
+    position:absolute;
+    top:80px;
+    right:0;
+    background:#000;
+    width:220px;
+    display:flex;
+    flex-direction:column;
+    padding:20px;
+    transform:translateX(100%);
+    transition:0.3s;
+  }
+
+  nav a{
+    margin:10px 0;
+  }
+
+  nav.show{
+    transform:translateX(0);
+  }
+
+  .menu-toggle{
+    display:flex;
+  }
+}
   </style>
 </head>
 <body>
  
   <!-- HEADER -->
-  <header>
-    <a href="index.html" class="logo">THE <span>WANN</span></a>
-    <nav>
-      <a href="index.html">Trang Chủ</a>
-      <a href="about.html" class="active">Về Chúng Tôi</a>
-      <a href="offers.html">Ưu Đãi</a>
-      <a href="index.html#events">Sự Kiện</a>
-      <a href="index.html#contact" class="nav-cta">Đặt Bàn</a>
-    </nav>
-  </header>
+<header>
+  <a href="index.html" class="logo">THE <span>WANN</span></a>
+
+  <nav id="navMenu">
+    <a href="index.html">Trang Chủ</a>
+    <a href="about.html">Về Chúng Tôi</a>
+    <a href="offers.html">Ưu Đãi</a>
+    <a href="index.html#events">Sự Kiện</a>
+    <a href="contact.html" class="active nav-cta">Đặt Bàn</a>
+  </nav>
+
+  <!-- Hamburger -->
+  <div class="menu-toggle" id="menuToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</header>
  
   <!-- HERO -->
   <section class="hero">
@@ -722,6 +774,14 @@
       });
     }, { threshold: 0.1 });
     document.querySelectorAll('.rv, .tl-item').forEach(el => io.observe(el));
+
+const toggle = document.getElementById("menuToggle");
+const nav = document.getElementById("navMenu");
+
+toggle.onclick = () => {
+  nav.classList.toggle("show");
+};
+
   </script>
  
 </body>
